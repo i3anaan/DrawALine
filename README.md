@@ -9,6 +9,8 @@ The not-so-trivial proces of pattern recognition
 2. Navigate to the root directory of the repository (ie. in DrawALine/) (use 'cd' and 'ls' to navigate in the command prompt)
 3. Follow the instructions to: Activate the virtualenv (`.\env\Scripts\activate`)
 4. Run the code with ???
+5. Add new dependencies from the virtualenv: `pip install (package)`
+6. Write out (updated) dependencies: `pip freeze > requirements.txt`
 
 ## First time setup
 _Windows commands are given, since linux users can probably manage themselves_
