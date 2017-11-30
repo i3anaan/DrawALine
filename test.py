@@ -2,7 +2,8 @@ import sys
 import scipy.io
 import numpy as np
 import matplotlib
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import sys
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
@@ -28,8 +29,21 @@ print("Test set size:     " + str(X_test.shape))
 #plt.imshow(img, cmap='gray')
 #plt.savefig('test.png')
 
+def visualizeImage( img ):
+   image = np.array_str(img)
+   image = image.replace('0', ' ').replace('1', '#')
+   return image
+
+def plotGraph(arr):
+    plt.figure(1)
+    for line in arr:
+        (x, y) = line
+        plt.plot(x, y, 'b')
+    plt.show()
+
+
 # build the model
-logistic = LogisticRegression(max_iter=1000, C=0.01)
+logistic = LogisticRegression(max_iter=1000, C=10)
 logistic.fit(X_train, y_train)
 #svm_model = SVC(C=3) #10
 #svm_model.fit(X_train, y_train)
@@ -37,6 +51,7 @@ logistic.fit(X_train, y_train)
 #print("alpha: " + str(alpha_test))
 #clf = MLPClassifier(solver='adam', alpha=alpha_test, hidden_layer_sizes=(800, 10), random_state=1, max_iter=10000)
 #clf.fit(X_train, y_train)
+
 
 # overall accuracy of the model
 print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) + " - " + str(logistic.score(X_test, y_test)))
@@ -56,8 +71,8 @@ def classification_error_training_size (model, sizes, training_set, test_set):
 
     for size in sizes:
         model.fit(X_tr[1:size], y_tr[1:size])
-        training_errors.append(model.score(X_tr[1:size], y_tr[1:size]))
-        test_errors.append(model.score(X_te, y_te))
+        training_errors.append(1-model.score(X_tr[1:size], y_tr[1:size]))
+        test_errors.append(1-model.score(X_te, y_te))
 
     return [(sizes, training_errors), (sizes, test_errors)]
 
@@ -77,5 +92,6 @@ def print_examples(model, test_set, test_set_answers):
 if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
     print_examples(logistic, X_test, y_test)
 
-set_sizes = [10,50,100,200,300,400,500,600,800,1000,1200,1400,1600,1800]
-print(classification_error_training_size(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+set_sizes = [10,50] + list(range(100, 1801, 50))
+#print(classification_error_training_size(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+plotGraph(classification_error_training_size(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
