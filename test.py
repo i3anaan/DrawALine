@@ -101,12 +101,16 @@ def print_examples (model, test_set, test_set_answers):
         print("Predicted value: " + str(prediction[0]))
         print("True value:      " + str(test_set_answers[i]))
 
-if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
+def option_set(option):
+    return (option in sys.argv)
+
+if  not (option_set("--no-examples")):
     print_examples(logistic, X_test, y_test)
 
-#set_sizes = [10,50] + list(range(100, 1801, 50))
-#print(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
-#plotGraph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
-reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
-#print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
-plotGraph(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+if not (option_set("--no-display")):
+    #set_sizes = [10,50] + list(range(100, 1801, 50))
+    #print(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+    #plotGraph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+    reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
+    #print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+    plotGraph(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
