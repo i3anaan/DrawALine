@@ -29,9 +29,9 @@ print("Test set size:     " + str(X_test.shape))
 #plt.savefig('test.png')
 
 # build the model
-logistic = LogisticRegression(max_iter=1000, C=10)
+logistic = LogisticRegression(max_iter=1000, C=0.3)
 logistic_reg = (lambda r: LogisticRegression(max_iter=1000, C=r))
-#logistic.fit(X_train, y_train)
+logistic.fit(X_train, y_train)
 #svm_model = SVC(C=3) #10
 #svm_model.fit(X_train, y_train)
 #alpha_test = 0.03
@@ -39,21 +39,20 @@ logistic_reg = (lambda r: LogisticRegression(max_iter=1000, C=r))
 #clf = MLPClassifier(solver='adam', alpha=alpha_test, hidden_layer_sizes=(800, 10), random_state=1, max_iter=10000)
 #clf.fit(X_train, y_train)
 
-# overall accuracy of the model
-#print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) + " - " + str(logistic.score(X_test, y_test)))
-#print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
-#print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
-
 def visualize_img (img):
     image = np.array_str(img)
     image = image.replace('0', ' ').replace('1', '#')
     return image
 
 def plotGraph(arr):
-    plt.figure(1)
+    fig = plt.figure(1)
     for line in arr:
         (x, y) = line
-        plt.plot(x, y, 'b')
+        plt.plot(x, y)
+
+    print (fig.axes)
+    #fig.axes[0].semilogx()
+
     plt.show()
 
 def training_size_classification_error (model, sizes, training_set, test_set):
@@ -104,13 +103,18 @@ def print_examples (model, test_set, test_set_answers):
 def option_set(option):
     return (option in sys.argv)
 
+# overall accuracy of the model
+print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) + " - " + str(logistic.score(X_test, y_test)))
+#print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
+#print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
+
 if  not (option_set("--no-examples")):
     print_examples(logistic, X_test, y_test)
 
 if not (option_set("--no-display")):
-    #set_sizes = [10,50] + list(range(100, 1801, 50))
+    set_sizes = [10,50] + list(range(100, 1801, 50))
     #print(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
-    #plotGraph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
-    reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
+    plotGraph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+    #reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
     #print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
-    plotGraph(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+    #plotGraph(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
