@@ -48,6 +48,19 @@ def visualize_img (img):
     image = image.replace('0', ' ').replace('1', '#')
     return image
 
+def classification_error_training_size (model, sizes, training_set, test_set):
+    training_errors = []
+    test_errors = []
+    (X_tr, y_tr) = training_set
+    (X_te, y_te) = test_set
+
+    for size in sizes:
+        model.fit(X_tr[1:size], y_tr[1:size])
+        training_errors.append(model.score(X_tr[1:size], y_tr[1:size]))
+        test_errors.append(model.score(X_te, y_te))
+
+    return [(sizes, training_errors), (sizes, test_errors)]
+
 # show model predictions on some instances
 def print_examples(model, test_set, test_set_answers):
     print("some examples: ")
@@ -63,3 +76,6 @@ def print_examples(model, test_set, test_set_answers):
 
 if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
     print_examples(logistic, X_test, y_test)
+
+set_sizes = [10,50,100,200,300,400,500,600,800,1000,1200,1400,1600,1800]
+print(classification_error_training_size(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
