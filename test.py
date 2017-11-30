@@ -27,6 +27,11 @@ print("size of y: " + str(y.shape))
 #plt.imshow(img, cmap='gray')
 #plt.savefig('test.png')
 
+def visualizeImage( img ):
+   image = np.array_str(img)
+   image = image.replace('0', ' ').replace('1', '#')
+   return image
+
 # build the model
 logistic = LogisticRegression(max_iter=1000, C=0.1)
 logistic.fit(X_train, y_train)
@@ -41,12 +46,12 @@ print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) +
 print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
 print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_test, y_test)))
 
-if (len(sys.argv) < 1 or sys.argv[1] != "--no-examples"):
+if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
     print("some examples from the NN:")
     # show model predictions on some instances
     for i in range(0, 399):
         img = X_test[i]
-        print(img.reshape((16, 16)).T)
+        print(visualizeImage(img.reshape((16, 16)).T))
         prediction = clf.predict(np.array([img]))
         print("Predicted value: " + str(prediction[0]))
         print("True value:      " + str(y_test[i]))
