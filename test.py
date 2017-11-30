@@ -1,6 +1,7 @@
 import scipy.io
 import numpy as np
 import matplotlib
+import sys
 #import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -40,15 +41,15 @@ print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) +
 print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
 print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_test, y_test)))
 
-print("some examples from the NN:")
-# show model predictions on some instances
-for i in range(0, 399):
-    img = X_test[i]
-    print(img.reshape((16, 16)).T)
-    prediction = clf.predict(np.array([img]))
-    print("Predicted value: " + str(prediction[0]))
-    print("True value:      " + str(y_test[i]))
-    userin = input("Continue? (Y/n):")
-    if userin == "n":
-        break
-
+if (len(sys.argv) < 1 or sys.argv[1] != "--no-examples"):
+    print("some examples from the NN:")
+    # show model predictions on some instances
+    for i in range(0, 399):
+        img = X_test[i]
+        print(img.reshape((16, 16)).T)
+        prediction = clf.predict(np.array([img]))
+        print("Predicted value: " + str(prediction[0]))
+        print("True value:      " + str(y_test[i]))
+        userin = input("Continue? (Y/n):")
+        if userin == "n":
+            break
