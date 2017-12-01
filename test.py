@@ -143,10 +143,19 @@ def print_examples (model, test_set, test_set_answers):
 if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
     print_examples(mlp, X_test, y_test)
 
-#set_sizes = [10,50] + list(range(100, 1801, 50))
-#print(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
-#make_graph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test))).savefig("SVM_trainingsize_clerror.png")
-reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
-#print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
-make_graph(regularization_classification_error(mlp_reg, reg_values, (X_train, y_train), (X_test, y_test))).savefig("MLP_regularization_clerror.png")
+# overall accuracy of the model
+print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train)) + " - " + str(logistic.score(X_test, y_test)))
+#print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
+#print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
+
+if  not (option_set("--no-examples")):
+    print_examples(logistic, X_test, y_test)
+
+if not (option_set("--no-display")):
+    #set_sizes = [10,50] + list(range(100, 1801, 50))
+    #print(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test)))
+    #make_graph(training_size_classification_error(logistic, set_sizes, (X_train, y_train), (X_test, y_test))).savefig("SVM_trainingsize_clerror.png")
+    reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
+    #print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+    make_graph(regularization_classification_error(mlp_reg, reg_values, (X_train, y_train), (X_test, y_test))).savefig("MLP_regularization_clerror.png")
 
