@@ -2,15 +2,22 @@ import math
 import numpy as np
 
 
-def shift(data_set, count):
-    if count < 0:
-        return shift_left(data_set, count * -1)
+def shift(data_set, x, y):
+    output = data_set
+    if x < 0:
+        output = shift_left(data_set, x * -1)
     else:
-        return shift_right(data_set, count)
+        output = shift_right(data_set, x)
+    if y < 0:
+        output = shift_down(data_set, y * -1)
+    else:
+        output = shift_up(data_set, y)
+
+    return output
 
 
-def crop_x(data_set, amount):
-    return shift(shift(shift(data_set, amount), -2 * amount), amount)
+def crop(data_set, x, y):
+    return shift(shift(shift(data_set, x, y), -2 * x, -2 * y), x, y)
 
 
 def shift_right(data_set, count=1):
@@ -53,5 +60,31 @@ def shift_left(data_set, count=1):
 
         data_set[i] = row
 
+    return data_set
+
+
+def shift_up(data_set, count=1):
+    dim = int(math.sqrt( len(data_set[0])))
+
+    for i in range (0, len(data_set)):
+        row = data_set[i]
+
+        for c in range(0, count*dim):
+            row = np.delete(row, 0)
+        row = np.append(row, [0] * count * dim)
+        data_set[i] = row
+
+    return data_set
+
+def shift_down(data_set, count=1):
+    dim = int(math.sqrt( len(data_set[0])))
+
+    for i in range (0, len(data_set)):
+        row = data_set[i]
+
+        for c in range(0, count*dim):
+            row = np.delete(row, len(row) - 1)
+        row = np.insert(row, 0, [0] * count * dim)
+        data_set[i] = row
 
     return data_set
