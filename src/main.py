@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 from classifiers import cls_manager as clss
+import distortions
 
 # this may be redundant
 matplotlib.rcParams['backend'] = "Qt4Agg"
@@ -120,7 +121,7 @@ def regularization_classification_error(model_reg, regs, training_set,
     (X_te, y_te) = test_set
 
     for reg in regs:
-        model = model_reg 
+        model = model_reg
         training_errors.append(1 - model.score(X_tr, y_tr))
         test_errors.append(1 - model.score(X_te, y_te))
 
@@ -144,6 +145,8 @@ def print_examples(model, test_set, test_set_answers):
             break
         img = test_set[i]
         print(visualize_img(img.reshape((28, 28))))
+        img2 = distortions.shift([img], 3)[0]
+        print(visualize_img(img2.reshape((28, 28))))
         prediction = model.predict(np.array([img]))
         print("Predicted value: " + str(prediction[0]))
         print("True value:      " + str(test_set_answers[i]))
@@ -151,7 +154,6 @@ def print_examples(model, test_set, test_set_answers):
 
 # print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
 # print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
-
 
 def option_set(option):
     return (option in sys.argv)
