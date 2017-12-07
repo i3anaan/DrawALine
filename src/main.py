@@ -147,6 +147,8 @@ def print_examples(model, test_set, test_set_answers):
             break
         img = test_set[i]
         print(visualize_img(img.reshape((28, 28))))
+        img2 = distortions.grow([img])[0]
+        print(visualize_img(img2.reshape((28, 28))))
         prediction = model.predict(np.array([img]))
         print("Predicted value: " + str(prediction[0]))
         print("True value:      " + str(test_set_answers[i]))

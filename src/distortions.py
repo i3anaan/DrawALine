@@ -106,3 +106,28 @@ def shift_down(data_set, count=1):
         data_set[i] = row
 
     return data_set
+
+
+def grow(data_set, count=1):
+    dim = int(math.sqrt( len(data_set[0])))
+
+    for i in range (0, len(data_set)):
+        temp_row = data_set[i]
+        for p in range(0, len(temp_row)):
+            if (temp_row[p] == 1):
+                data_set[i] = set_cross(data_set[i], p, dim)
+
+    return data_set
+
+
+def set_cross(row, index, dim):
+    row = maybe_set(row, index+1, 1)
+    row = maybe_set(row, index-1, 1)
+    row = maybe_set(row, index-dim, 1)
+    row = maybe_set(row, index+dim, 1)
+    return row
+
+def maybe_set(row, index, value):
+    if (index > 0 and index < len(data_set)):
+        row[index] = value
+    return row
