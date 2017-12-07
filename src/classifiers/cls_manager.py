@@ -32,3 +32,12 @@ def create_default_svm(training_set):
 def create_custom_svm(training_set, params):
     pars = {**cls_svm.defaults, **params}
     return cls_svm.create(pars).fit(*training_set)
+
+
+def create_default_nmc(training_set):
+    return cls_nmc.create().fit(*training_set)
+
+
+def create_custom_nmc(training_set, params):
+    pars = {**cls_svm.defaults, **params}
+    return cls_nmc.create(pars).fit(*training_set)

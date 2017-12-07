@@ -11,9 +11,9 @@ from classifiers import cls_manager as clss
 matplotlib.rcParams['backend'] = "Qt4Agg"
 
 # load the data
-X_full = scipy.io.loadmat('./matlabFiles/data28.mat')['matImages'][0]
+X_full = scipy.io.loadmat('./matlabFiles/data28.mat')['data28'][0]
 X_full = np.array([x.reshape((784, )) for x in X_full])
-y_full = scipy.io.loadmat('./matlabFiles/labels28.mat')['matLabels'].ravel() - 1
+y_full = scipy.io.loadmat('./matlabFiles/labels28.mat')['labels28'].ravel() - 1
 X_train, X_test, y_train, y_test = train_test_split(
     X_full, y_full, test_size=0.1, random_state=1)
 
@@ -120,7 +120,7 @@ def regularization_classification_error(model_reg, regs, training_set,
     (X_te, y_te) = test_set
 
     for reg in regs:
-        model = model_reg 
+        model = model_reg
         training_errors.append(1 - model.score(X_tr, y_tr))
         test_errors.append(1 - model.score(X_te, y_te))
 
