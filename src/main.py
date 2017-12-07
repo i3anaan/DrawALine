@@ -4,9 +4,8 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
+
+from classifiers import cls_manager as clss
 
 # this may be redundant
 matplotlib.rcParams['backend'] = "Qt4Agg"
@@ -30,20 +29,9 @@ print("Test set size:     " + str(X_test.shape))
 # plt.savefig('test.png')
 
 # build the model
-logistic = LogisticRegression(max_iter=1000, C=10)
-logistic_reg = (lambda r: LogisticRegression(max_iter=1000, C=r))
 
 # logistic.fit(X_train, y_train)
-svm = SVC(C=3)  # 10
-svm_reg = (lambda r: SVC(C=r))  # 10
 # svm.fit(X_train, y_train)
-mlp = MLPClassifier(
-    solver='adam',
-    alpha=0.03,
-    hidden_layer_sizes=(800, 10),
-    random_state=1,
-    max_iter=10000)
-mlp_reg = (lambda r: MLPClassifier(solver='adam', alpha=r, hidden_layer_sizes=(800, 10), random_state=1, max_iter=10000))
 
 # clf.fit(X_train, y_train)
 
@@ -132,8 +120,7 @@ def regularization_classification_error(model_reg, regs, training_set,
     (X_te, y_te) = test_set
 
     for reg in regs:
-        model = model_reg(reg)
-        model.fit(X_tr, y_tr)
+        model = model_reg 
         training_errors.append(1 - model.score(X_tr, y_tr))
         test_errors.append(1 - model.score(X_te, y_te))
 
@@ -170,9 +157,9 @@ def option_set(option):
     return (option in sys.argv)
 
 
-fit_cls()
 if not (option_set("--no-examples")):
-    print_examples(logistic, X_test, y_test)
+    cls = clss.create_default_logistic((X_train, y_train))
+    print_examples(cls, X_test, y_test)
 
 if not (option_set("--no-display")):
     # set_sizes = [10,50] + list(range(100, 1801, 50))
@@ -182,7 +169,10 @@ if not (option_set("--no-display")):
         0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000
     ]
     # print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+
+    cls = clss.create_custom_logistic((X_train, y_train), dict(C=0.03))
+
     make_graph(
         regularization_classification_error(
-            mlp_reg, reg_values, (X_train, y_train),
+            cls, reg_values, (X_train, y_train),
             (X_test, y_test))).savefig("MLP_regularization_clerror.png")
