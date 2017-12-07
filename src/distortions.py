@@ -2,6 +2,24 @@ import math
 import numpy as np
 
 
+def extend_dataset_shift(data_X, data_y):
+    output_X = data_X
+    output_y = data_y
+
+    output_X = np.concatenate((output_X, shift(data_X, 1, 1)))
+    output_y = np.concatenate((output_y, data_y))
+    output_X = np.concatenate((output_X, shift(data_X, -1, 1)))
+    output_y = np.concatenate((output_y, data_y))
+    output_X = np.concatenate((output_X, shift(data_X, 1, -1)))
+    output_y = np.concatenate((output_y, data_y))
+    output_X = np.concatenate((output_X, shift(data_X, -1, -1)))
+    output_y = np.concatenate((output_y, data_y))
+
+    return (output_X, output_y)
+
+
+
+
 def shift(data_set, x, y):
     output = data_set
     if x < 0:

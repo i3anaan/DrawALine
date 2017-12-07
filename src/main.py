@@ -18,6 +18,8 @@ y_full = scipy.io.loadmat('./matlabFiles/labels28.mat')['matLabels'].ravel() - 1
 X_train, X_test, y_train, y_test = train_test_split(
     X_full, y_full, test_size=0.1, random_state=1)
 
+X_train, y_train = distortions.extend_dataset_shift(X_train, y_train)
+
 # print the shapes
 print("Training set size: " + str(X_train.shape))
 print("Test set size:     " + str(X_test.shape))
@@ -145,8 +147,6 @@ def print_examples(model, test_set, test_set_answers):
             break
         img = test_set[i]
         print(visualize_img(img.reshape((28, 28))))
-        img2 = distortions.crop([img], 3, 5)[0]
-        print(visualize_img(img2.reshape((28, 28))))
         prediction = model.predict(np.array([img]))
         print("Predicted value: " + str(prediction[0]))
         print("True value:      " + str(test_set_answers[i]))
