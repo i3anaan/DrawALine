@@ -53,6 +53,13 @@ mlp_reg = (lambda r: MLPClassifier(solver='adam', alpha=r, hidden_layer_sizes=(8
 # print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
 
 
+def fit_cls():
+
+    logistic.fit(X_train, y_train)
+    svm.fit(X_train, y_train)
+    mlp.fit(X_train, y_train)
+
+
 def visualize_img(img):
     """
     Turns the array into a string and makes it more readable.
@@ -155,13 +162,6 @@ def print_examples(model, test_set, test_set_answers):
         print("True value:      " + str(test_set_answers[i]))
 
 
-if (len(sys.argv) <= 1 or sys.argv[1] != "--no-examples"):
-    print_examples(mlp, X_test, y_test)
-
-# overall accuracy of the model
-print("Accuracy Logistic Regression: " + str(logistic.score(X_train, y_train))
-      + " - " + str(logistic.score(X_test, y_test)))
-
 # print("Accuracy Support Vector Machine: " + str(svm_model.score(X_train, y_train)) + " - " + str(svm_model.score(X_test, y_test)))
 # print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
 
@@ -170,6 +170,7 @@ def option_set(option):
     return (option in sys.argv)
 
 
+fit_cls()
 if not (option_set("--no-examples")):
     print_examples(logistic, X_test, y_test)
 
