@@ -1,20 +1,22 @@
 import sys
-import scipy.io
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import scipy.io
+import numpy as np
+
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 
+from dataset import NIST as dataset
+
 # this may be redundant
 matplotlib.rcParams['backend'] = "Qt4Agg"
 
 # load the data
-X_full = scipy.io.loadmat('./matlabFiles/data28.mat')['matImages'][0]
-X_full = np.array([x.reshape((784, )) for x in X_full])
-y_full = scipy.io.loadmat('./matlabFiles/labels28.mat')['matLabels'].ravel() - 1
+X_full = dataset.X_full
+y_full = dataset.y_full
 X_train, X_test, y_train, y_test = train_test_split(
     X_full, y_full, test_size=0.1, random_state=1)
 
