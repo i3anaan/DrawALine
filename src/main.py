@@ -41,13 +41,6 @@ print("Test set size:     " + str(X_test.shape))
 # print("Accuracy Neural Network: " + str(clf.score(X_train, y_train)) + " - " + str(clf.score(X_cv, y_cv)))
 
 
-def fit_cls():
-
-    logistic.fit(X_train, y_train)
-    svm.fit(X_train, y_train)
-    mlp.fit(X_train, y_train)
-
-
 def visualize_img(img):
     """
     Turns the array into a string and makes it more readable.
@@ -168,7 +161,7 @@ if not (option_set("--no-display")):
     reg_values = [
         0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000
     ]
-    # print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
+    print(regularization_classification_error(logistic_reg, reg_values, (X_train, y_train), (X_test, y_test)))
 
     cls = clss.create_custom_logistic((X_train, y_train), dict(C=0.03))
 
