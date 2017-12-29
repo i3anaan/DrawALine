@@ -12,9 +12,9 @@ import param_plotting as pp
 
 def main():
     # load the data
-    X_full = scipy.io.loadmat('../matlabFiles/data28.mat')['data28'][0]
+    X_full = scipy.io.loadmat('./matlabFiles/data28.mat')['data28'][0]
     X_full = np.array([x.reshape((784, )) for x in X_full])
-    y_full = scipy.io.loadmat('../matlabFiles/labels28.mat')['labels28'].ravel() - 1
+    y_full = scipy.io.loadmat('./matlabFiles/labels28.mat')['labels28'].ravel() - 1
     X_train, X_test, y_train, y_test = train_test_split(
         X_full, y_full, test_size=0.1, random_state=1)
 
@@ -33,18 +33,11 @@ def main():
     #    random_state=1,
     #    max_iter=10000)
 
-# image processing
-# img = X[0, :]
-# img = np.reshape(img, (16, 16)).T
-# print(img)
-# plt.imshow(img, cmap='gray')
-# plt.savefig('test.png')
-
     model.fit(X_train, y_train)
     print("Accuracy of the model on training: " + str(model.score(X_train, y_train))
           + " and test: " + str(model.score(X_test, y_test)) + " data.")
 
-    if not (option_set("--no-examples")):
+    if (option_set("--examples")):
         print_examples(model, X_test, y_test)
 
 #model = SVC(C=3)  # 10
