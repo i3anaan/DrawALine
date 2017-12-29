@@ -24,14 +24,14 @@ def main():
 
     # build the model
     #model = SVC(C=3)  # 10
-    #model = LogisticRegression(max_iter=1000, C=10)
+    model = LogisticRegression(max_iter=1000, C=10)  # 10
     #model_reg = (lambda r: LogisticRegression(max_iter=1000, C=r))
-    model = MLPClassifier(
-        solver='adam',
-        alpha=0.01,  # 0.01
-        hidden_layer_sizes=(800, 200, 30), # 800, 200, 30 -> 97.6
-        random_state=1,
-        max_iter=10000)
+    #model = MLPClassifier(
+    #    solver='adam',
+    #    alpha=0.01,  # 0.01
+    #    hidden_layer_sizes=(800, 200, 30), # 800, 200, 30 -> 97.6
+    #    random_state=1,
+    #    max_iter=10000)
 
 
     model.fit(X_train, y_train)
