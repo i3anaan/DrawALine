@@ -102,3 +102,4 @@ ENV/
 
 # nix
 default.nix
+.vs/
