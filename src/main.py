@@ -60,12 +60,17 @@ def main():
 def option_set(option):
     return (option in sys.argv)
 
+
+#best values:
+#k_NN = 3; k_PCA = 40 and 41 -> 97.80%
+#k_NN = 1; k_PCA = 43 and 44 -> 97.80%
+#without PCA: K_NN = 1 -> 96.00% very slow!
 def knn_svd_pca(X_full, y_full):
-    for k_PCA in range(30, 100, 4):
+    for k_PCA in range(35, 45, 1):
         X_feat = svd_pca(X_full, k_PCA)
 
         X_train, X_test, y_train, y_test = train_test_split(
-            X_full, y_full, test_size=0.1, random_state=1)
+            X_feat, y_full, test_size=0.1, random_state=1)
 
         model = knn(X_train, y_train, X_test, y_test, k_PCA)
 
