@@ -1,3 +1,4 @@
+import os
 import os.path
 import sys
 import scipy.io
@@ -18,10 +19,11 @@ import csv
 
 def main():
     # load the data
-    X_full = scipy.io.loadmat('../matlabFiles/data28.mat')['data28'][0]
+    full_path = os.path.realpath(__file__)
+    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
     X_full = np.array([x.reshape((784, )) for x in X_full])
     y_full = scipy.io.loadmat(
-        '../matlabFiles/labels28.mat')['labels28'].ravel() - 1
+        os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
     # Split the data set
     if (option_set("--small")):
