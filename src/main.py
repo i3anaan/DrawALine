@@ -1,3 +1,4 @@
+import os.path
 import sys
 import scipy.io
 import numpy as np
@@ -11,6 +12,7 @@ import distortions
 from visualise_images import print_examples
 
 import csv
+
 
 
 def main():
@@ -62,23 +64,34 @@ def cherry_pick_data_set(amount, X_full, y_full):
     for i in range(10):
         X_small.extend(X_full[step * i:(step * i + amount)])
         y_small.extend(y_full[step * i:(step * i + amount)])
-    return X_small, y_small
+    return np.array(X_small), np.array(y_small)
 
 
 def output_result(model, X_train, y_train, X_test, y_test):
-    print("Accuracy of the model on training: " +
-          str(model.score(X_train, y_train)) + " and test: " +
-          str(model.score(X_test, y_test)) + " data.")
+    train_acc = str(model.score(X_train, y_train))
+    test_acc = str(model.score(X_test, y_test))
+    print("Accuracy of the model on training: " + train_acc + " and test: " +
+          test_acc + " data.")
+    file_name = 'results_' + type(model).__name__ + '.csv'
+    file_exists = os.path.isfile(file_name)
 
-    with open('results.csv', 'w') as csvfile:
-        fieldnames = ['train_accuracy', 'test_accuracy']
+    with open(file_name, 'a') as csvfile:
+        fieldnames = [
+            'train_accuracy', 'test_accuracy', 'cls_name'
+        ]
+        fieldnames = fieldnames + list(model.get_params().keys())
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        writer.writeheader()
-        writer.writerow({
-            'train_accuracy': str(model.score(X_train, y_train)),
-            'test_accuracy': str(model.score(X_test, y_test))
-        })
+        data = {
+            'train_accuracy': train_acc,
+            'test_accuracy': test_acc,
+            'cls_name': type(model).__name__,
+        }
+        data = {**data, **model.get_params()}
+
+        if not file_exists:
+            writer.writeheader()  # file doesn't exist yet, write a header
+        writer.writerow(data)
 
 
 main()

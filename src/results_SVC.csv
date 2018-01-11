@@ -1,0 +1,2 @@
+train_accuracy,test_accuracy,cls_name,gamma,coef0,cache_size,probability,class_weight,C,shrinking,kernel,degree,random_state,decision_function_shape,max_iter,verbose,tol
+1.0,0.6,SVC,auto,0.0,200,False,,3,True,rbf,3,,ovr,-1,False,0.001

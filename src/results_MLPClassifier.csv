@@ -1,0 +1,4 @@
+train_accuracy,test_accuracy,cls_name,shuffle,verbose,tol,alpha,batch_size,solver,warm_start,beta_1,power_t,validation_fraction,nesterovs_momentum,learning_rate_init,early_stopping,momentum,random_state,epsilon,learning_rate,max_iter,beta_2,hidden_layer_sizes,activation
+1.0,0.7,MLPClassifier,True,False,0.0001,0.01,auto,adam,False,0.9,0.5,0.1,True,0.001,False,0.9,1,1e-08,constant,10000,0.999,"(800, 200, 30)",relu
+1.0,0.7,MLPClassifier,0.01,0.9,0.9,0.5,auto,0.1,0.999,adam,constant,False,0.0001,1,False,10000,0.001,"(800, 200, 30)",1e-08,True,True,relu,False
+1.0,0.7,MLPClassifier,constant,0.1,relu,0.999,0.5,adam,auto,True,0.001,0.0001,10000,0.9,False,0.9,False,1e-08,"(800, 200, 30)",0.01,False,True,1
