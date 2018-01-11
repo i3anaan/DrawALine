@@ -131,3 +131,11 @@ def maybe_set(row, index, value):
     if (index > 0 and index < len(data_set)):
         row[index] = value
     return row
+
+def and_filter(data_set, pattern=(2,1)):
+    """ Turns out this is not useful. """
+    (ones, zeros) = pattern
+    length = len(data_set[0])
+    my_filter = np.array([1]*ones + [0]*zeros).repeat(400)
+    data_new = np.array([np.logical_and(my_filter[:length], x) for x in data_set])
+    return data_new
