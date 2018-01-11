@@ -40,9 +40,9 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
-    if (option_set("knn")):
-        cls_knn.knn_svd_pca(X_full, y_full, output_result)
     if (option_set("knn-pca")):
+        cls_knn.knn_svd_pca(X_full, y_full, output_result)
+    if (option_set("knn")):
         cls_knn.testAccuracy(X_train, y_train, X_test, y_test, 0,
                              output_result)
     if (option_set("svc")):
