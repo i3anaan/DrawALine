@@ -1,3 +1,5 @@
+import os
+import os.path
 import sys
 import scipy.io
 import numpy as np
@@ -7,18 +9,21 @@ from sklearn.model_selection import train_test_split
 import cls_knn
 import cls_svc
 import cls_mlp
+import cls_log
 import distortions
 from visualise_images import print_examples
 
 import csv
 
 
+
 def main():
     # load the data
-    X_full = scipy.io.loadmat('../matlabFiles/data28.mat')['data28'][0]
+    full_path = os.path.realpath(__file__)
+    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
     X_full = np.array([x.reshape((784, )) for x in X_full])
     y_full = scipy.io.loadmat(
-        '../matlabFiles/labels28.mat')['labels28'].ravel() - 1
+        os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
     print("Splitting the data set...")
     X_train, X_test, y_train, y_test = train_test_split(
@@ -47,6 +52,9 @@ def main():
         cls_svc.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("mlp")):
         cls_mlp.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("log")):
+        cls_log.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+
 
 
 def option_set(option):
@@ -65,19 +73,33 @@ def cherry_pick_data_set(amount, X_full, y_full):
 
 
 def output_result(model, X_train, y_train, X_test, y_test):
-    print("Accuracy of the model on training: " +
-          str(model.score(X_train, y_train)) + " and test: " +
-          str(model.score(X_test, y_test)) + " data.")
+    train_acc = str(model.score(X_train, y_train))
+    test_acc = str(model.score(X_test, y_test))
+    print("Accuracy of the model on training: " + train_acc + " and test: " +
+          test_acc + " data.")
+    file_name = 'results_' + type(model).__name__ + '.csv'
+    file_exists = os.path.isfile(file_name)
 
-    with open('results.csv', 'w') as csvfile:
-        fieldnames = ['train_accuracy', 'test_accuracy']
+    with open(file_name, 'a') as csvfile:
+        fieldnames = [
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape'
+        ]
+        fieldnames = fieldnames + list(model.get_params().keys())
+        fieldnames.sort()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        writer.writeheader()
-        writer.writerow({
-            'train_accuracy': str(model.score(X_train, y_train)),
-            'test_accuracy': str(model.score(X_test, y_test))
-        })
+        data = {
+            'train_accuracy': train_acc,
+            'test_accuracy': test_acc,
+            'cls_name': type(model).__name__,
+            'train_shape': str(X_train.shape),
+            'test_shape': str(X_test.shape)
+        }
+        data = {**data, **model.get_params()}
+
+        if not file_exists:
+            writer.writeheader()  # file doesn't exist yet, write a header
+        writer.writerow(data)
 
 
 main()

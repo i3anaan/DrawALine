@@ -5,4 +5,4 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python src/main.py --no-examples --no-display
+  - python src/main.py --small knn log mlp svc
