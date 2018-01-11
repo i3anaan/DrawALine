@@ -21,8 +21,13 @@ def main():
     y_full = scipy.io.loadmat(
         '../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
-    if (option_set("knn")):
+    if (option_set("knn-pca")):
         cls_knn.knn_svd_pca(X_full, y_full)
+    if(option_set("knn-small")):
+        X_small, y_small = get_some_data(10, X_full, y_full)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_small, y_small, test_size=0.1, random_state=1)
+        model = cls_knn.knn(X_train, y_train, X_test, y_test, 0)
     else:
 
         X_train, X_test, y_train, y_test = train_test_split(
@@ -65,6 +70,17 @@ def main():
 
 def option_set(option):
     return (option in sys.argv)
+
+def get_some_data(amount, X_full, y_full):
+    length = len(X_full)
+    step = round(length / 10)
+    X_small = []
+    y_small = []
+    #X_small.append(X_full[0:length:step])
+    for i in range(10):
+        X_small.extend(X_full[step*i:(step*i + amount)])
+        y_small.extend(y_full[step*i:(step*i + amount)])
+    return X_small, y_small
 
 
 main()

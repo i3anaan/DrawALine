@@ -8,9 +8,6 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
-from visualise_images import print_examples
-import param_plotting as pp
-
 
 #best values:
 #k_NN = 3; k_PCA = 40 and 41 -> 97.80%
@@ -38,7 +35,10 @@ def knn(trainData, trainLabels, valData, valLabels, k_PCA):
 
         # evaluate the model and update the accuracies list
         score = model.score(valData, valLabels)
-        print("k_PCA=%d k_NN=%d, accuracy=%.2f%%" % (k_PCA, k, score * 100))
+        if(k_PCA>0):
+            print("k_PCA=%d k_NN=%d, accuracy=%.2f%%" % (k_PCA, k, score * 100))
+        else:
+            print("k_NN=%d, accuracy=%.2f%%" % ( k, score * 100))
         accuracies.append(score)
 
     # find the value of k that has the largest accuracy
