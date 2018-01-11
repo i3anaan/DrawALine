@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 import cls_knn
 import cls_svc
 import cls_mlp
+import cls_log
 import distortions
 from visualise_images import print_examples
 
@@ -48,6 +49,9 @@ def main():
         cls_svc.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("mlp")):
         cls_mlp.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("log")):
+        cls_log.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+
 
 
 def option_set(option):
@@ -85,6 +89,7 @@ def output_result(model, X_train, y_train, X_test, y_test):
             'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape'
         ]
         fieldnames = fieldnames + list(model.get_params().keys())
+        fieldnames.sort()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         data = {
