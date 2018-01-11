@@ -3,15 +3,13 @@ import scipy.io
 import numpy as np
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
-from sklearn.neighbors import KNeighborsClassifier
 
 import cls_knn
+import cls_svc
+import cls_mlp
+import distortions
 
 from visualise_images import print_examples
-import param_plotting as pp
 
 
 def main():
@@ -21,46 +19,29 @@ def main():
     y_full = scipy.io.loadmat(
         '../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
+    # Optionally extend the data set by using distortions
+    if (option_set("--distort")):
+        print("Applying distortion...")
+        X_full, y_full = distortions.extend_dataset_shift(X_full, y_full)
+
+    # Split the data set
+    print("Splitting the data set...")
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_full, y_full, test_size=0.1, random_state=1)
+
+    # print the shapes
+    print("Training set size: " + str(X_train.shape))
+    print("Test set size:     " + str(X_test.shape))
+
     if (option_set("knn")):
         cls_knn.knn_svd_pca(X_full, y_full)
-    else:
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X_full, y_full, test_size=0.1, random_state=1)
-
-        # print the shapes
-        print("Training set size: " + str(X_train.shape))
-        print("Test set size:     " + str(X_test.shape))
-
-        # build the model
-        #model = SVC(C=3)  # 10
-        model = LogisticRegression(max_iter=1000, C=10)  # 10
-        #model_reg = (lambda r: LogisticRegression(max_iter=1000, C=r))
-        #model = MLPClassifier(
-        #    solver='adam',
-        #    alpha=0.01,  # 0.01
-        #    hidden_layer_sizes=(800, 200, 30), # 800, 200, 30 -> 97.6
-        #    random_state=1,
-        #    max_iter=10000)
-
-        model.fit(X_train, y_train)
-        print("Accuracy of the model on training: " +
-              str(model.score(X_train, y_train)) + " and test: " +
-              str(model.score(X_test, y_test)) + " data.")
+    if (option_set("svc")):
+        cls_svc.testAccuracy(X_train, y_train, X_test, y_test)
+    if (option_set("mlp")):
+        cls_mlp.testAccuracy(X_train, y_train, X_test, y_test)
 
     if (option_set("--examples")):
         print_examples(model, X_test, y_test)
-
-
-#model = SVC(C=3)  # 10
-#model_reg = (lambda r: SVC(C=r))  # 10
-#model = MLPClassifier(
-#    solver='adam',
-#    alpha=0.03,
-#    hidden_layer_sizes=(800, 10),
-#    random_state=1,
-#    max_iter=10000)
-#model_reg = (lambda r: MLPClassifier(solver='adam', alpha=r, hidden_layer_sizes=(800, 10), random_state=1, max_iter=10000))
 
 
 def option_set(option):
