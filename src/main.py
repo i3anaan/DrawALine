@@ -77,7 +77,7 @@ def output_result(model, X_train, y_train, X_test, y_test):
 
     with open(file_name, 'a') as csvfile:
         fieldnames = [
-            'train_accuracy', 'test_accuracy', 'cls_name'
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape'
         ]
         fieldnames = fieldnames + list(model.get_params().keys())
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -86,6 +86,8 @@ def output_result(model, X_train, y_train, X_test, y_test):
             'train_accuracy': train_acc,
             'test_accuracy': test_acc,
             'cls_name': type(model).__name__,
+            'train_shape': str(X_train.shape),
+            'test_shape': str(X_test.shape)
         }
         data = {**data, **model.get_params()}
 
