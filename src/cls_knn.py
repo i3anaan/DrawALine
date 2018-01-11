@@ -1,15 +1,8 @@
 import sys
-import scipy.io
 import numpy as np
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
-
-from visualise_images import print_examples
-import param_plotting as pp
 
 
 #best values:
