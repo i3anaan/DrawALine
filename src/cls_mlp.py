@@ -1,7 +1,7 @@
 from sklearn.neural_network import MLPClassifier
 
 
-def testAccuracy(X_train, y_train, X_test, y_test):
+def testAccuracy(X_train, y_train, X_test, y_test, output_result):
     print("Training MLP...")
     model = MLPClassifier(
         solver='adam',
@@ -11,6 +11,4 @@ def testAccuracy(X_train, y_train, X_test, y_test):
         max_iter=10000)
 
     model.fit(X_train, y_train)
-    print("Accuracy of the model on training: " +
-          str(model.score(X_train, y_train)) + " and test: " +
-          str(model.score(X_test, y_test)) + " data.")
+    output_result(model, X_train, y_train, X_test, y_test)

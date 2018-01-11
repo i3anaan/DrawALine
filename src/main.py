@@ -8,8 +8,9 @@ import cls_knn
 import cls_svc
 import cls_mlp
 import distortions
-
 from visualise_images import print_examples
+
+import csv
 
 
 def main():
@@ -19,15 +20,19 @@ def main():
     y_full = scipy.io.loadmat(
         '../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
+    # Split the data set
+    print("Splitting the data set...")
+    if (option_set("--small")):
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_full, y_full, test_size=0.1, random_state=1)
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_full, y_full, test_size=0.1, random_state=1)
+
     # Optionally extend the data set by using distortions
     if (option_set("--distort")):
         print("Applying distortion...")
-        X_full, y_full = distortions.extend_dataset_shift(X_full, y_full)
-
-    # Split the data set
-    print("Splitting the data set...")
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_full, y_full, test_size=0.1, random_state=1)
+        X_train, y_train = distortions.extend_dataset_shift(X_train, y_train)
 
     # print the shapes
     print("Training set size: " + str(X_train.shape))
@@ -36,16 +41,29 @@ def main():
     if (option_set("knn")):
         cls_knn.knn_svd_pca(X_full, y_full)
     if (option_set("svc")):
-        cls_svc.testAccuracy(X_train, y_train, X_test, y_test)
+        cls_svc.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("mlp")):
-        cls_mlp.testAccuracy(X_train, y_train, X_test, y_test)
-
-    if (option_set("--examples")):
-        print_examples(model, X_test, y_test)
+        cls_mlp.testAccuracy(X_train, y_train, X_test, y_test, output_result)
 
 
 def option_set(option):
     return (option in sys.argv)
+
+
+def output_result(model, X_train, y_train, X_test, y_test):
+    print("Accuracy of the model on training: " +
+          str(model.score(X_train, y_train)) + " and test: " +
+          str(model.score(X_test, y_test)) + " data.")
+
+    with open('results.csv', 'w') as csvfile:
+        fieldnames = ['train_accuracy', 'test_accuracy']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        writer.writerow({
+            'train_accuracy': str(model.score(X_train, y_train)),
+            'test_accuracy': str(model.score(X_test, y_test))
+        })
 
 
 main()
