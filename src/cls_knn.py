@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 
-from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsClassifier
 
 
@@ -9,20 +9,20 @@ from sklearn.neighbors import KNeighborsClassifier
 #k_NN = 3; k_PCA = 40 and 41 -> 97.80%
 #k_NN = 1; k_PCA = 43 and 44 -> 97.80%
 #without PCA: K_NN = 1 -> 96.00% very slow!
-def knn_svd_pca(X_full, y_full, output_result):
+def knn_pca(X_train, y_train, X_test, y_test, output_result):
     for k_PCA in range(35, 45, 1):
-        X_feat = svd_pca(X_full, k_PCA)
+        X_feat_train, X_feat_test = pca(X_train, X_test, k_PCA)
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            X_feat, y_full, test_size=0.1, random_state=1)
-
-        model = testAccuracy(X_train, y_train, X_test, y_test, k_PCA,
+        model = testAccuracy(X_feat_train, y_train, X_feat_test, y_test, k_PCA,
                              output_result)
 
 
 def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
                  output_result):
-    kVals = range(1, 30, 1)
+    if(len(trainLabels)>1000):
+        kVals = range(1, 20, 1)
+    else:
+        kVals = range(1, 5, 1)
     accuracies = []
 
     # loop over various values of `k` for the k-Nearest Neighbor classifier
@@ -50,9 +50,14 @@ def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
     return model
 
 
-def svd_pca(data, k):
-    """Reduce DATA using its K principal components."""
-    data = data.astype("float64")
-    data -= np.mean(data, axis=0)
-    U, S, V = np.linalg.svd(data, full_matrices=False)
-    return U[:, :k].dot(np.diag(S)[:k, :k])
+def pca(X_train, X_test, k):
+    pca = PCA(n_components = k)
+    X_train = pca.fit_transform(X_train)
+    X_test = pca.transform(X_test)
+    explained_variance = pca.explained_variance_ratio_
+    return X_train, X_test
+    #"""Reduce DATA using its K principal components."""
+    #data = data.astype("float64")
+    #data -= np.mean(data, axis=0)
+    #U, S, V = np.linalg.svd(data, full_matrices=False)
+    #return U[:, :k].dot(np.diag(S)[:k, :k])
