@@ -2,6 +2,7 @@ import os
 import os.path
 import sys
 import time
+import datetime
 import scipy.io
 import numpy as np
 
@@ -99,7 +100,7 @@ def output_result(model, X_train, y_train, X_test, y_test, time_training=float("
 
     with open(file_name, 'a') as csvfile:
         fieldnames = [
-            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test'
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
         ]
         fieldnames = fieldnames + list(model.get_params().keys())
         fieldnames.sort()
@@ -113,6 +114,7 @@ def output_result(model, X_train, y_train, X_test, y_test, time_training=float("
             'test_shape': str(X_test.shape),
             'time_training': str(time_training),
             'time_test': str(time_test),
+            'log_time': datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
 
         }
         data = {**data, **model.get_params()}
