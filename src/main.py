@@ -10,6 +10,7 @@ import cls_knn
 import cls_svc
 import cls_mlp
 import cls_log
+import cls_qdc
 import distortions
 
 import csv
@@ -52,6 +53,8 @@ def main():
         cls_mlp.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("log")):
         cls_log.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if(option_set("qdc")):
+        cls_qdc.testAccuracy(X_train, y_train, X_test, y_test, output_result)
 
 
 
