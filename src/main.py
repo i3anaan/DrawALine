@@ -11,7 +11,6 @@ import cls_svc
 import cls_mlp
 import cls_log
 import distortions
-from visualise_images import print_examples
 
 import csv
 
@@ -32,9 +31,12 @@ def main():
         X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
     # Optionally extend the data set by using distortions
-    if (option_set("--distort")):
+    if (option_set("--distort-shift")):
         print("Applying distortion...")
         X_train, y_train = distortions.extend_dataset_shift(X_train, y_train)
+    if (option_set("--distort-grow")):
+        print("Applying distortion...")
+        X_train, y_train = distortions.extend_dataset_grow(X_train, y_train, 1)
 
     # print the shapes
     print("Training set size: " + str(X_train.shape))

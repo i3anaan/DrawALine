@@ -5,4 +5,4 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python src/main.py --small knn knn-pca log mlp svc
+  - python src/main.py --small --distort-shift --distort-grow knn knn-pca log mlp svc
