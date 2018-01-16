@@ -133,6 +133,7 @@ def grow(data_set):
         data_set[i] = updated_row
     return data_set
 
+
 def shrink(data_set):
     dim = int(math.sqrt(len(data_set[0])))
 
@@ -151,8 +152,16 @@ def set_cross(data_set, row, index, dim):
     row = maybe_set(data_set, row, index + dim, 1)
     return row
 
+
 def check_block(data_set, row, index, dim):
-    return maybe_check(data_set, row, index+1, 1) and maybe_check(data_set, row, index-1, 1) and maybe_check(data_set, row, index-dim, 1) and maybe_check(data_set, row, index-dim-1, 1) and maybe_check(data_set, row, index-dim+1, 1) and maybe_check(data_set, row, index+dim, 1) and maybe_check(data_set, row, index+dim-1, 1) and maybe_check(data_set, row, index+dim+1, 1)
+    return maybe_check(data_set, row, index + 1, 1) and maybe_check(
+        data_set, row, index - 1, 1) and maybe_check(
+            data_set, row, index - dim, 1) and maybe_check(
+                data_set, row, index - dim - 1, 1) and maybe_check(
+                    data_set, row, index - dim + 1, 1) and maybe_check(
+                        data_set, row, index + dim, 1) and maybe_check(
+                            data_set, row, index + dim - 1, 1) and maybe_check(
+                                data_set, row, index + dim + 1, 1)
 
 
 def maybe_set(data_set, row, index, value):
@@ -160,5 +169,6 @@ def maybe_set(data_set, row, index, value):
         row[index] = value
     return row
 
+
 def maybe_check(data_set, row, index, value):
-    return index >= 0 and index < len(row) and row[index]==value
+    return index >= 0 and index < len(row) and row[index] == value

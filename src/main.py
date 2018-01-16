@@ -15,7 +15,6 @@ import distortions
 import csv
 
 
-
 def main():
     # load the data
     full_path = os.path.realpath(__file__)
@@ -27,11 +26,11 @@ def main():
     # Split the data set
     if (option_set("--small")):
         print("Cherry picking data set...")
-        X_full, y_full = cherry_pick_data_set(10, X_full, y_full)
-
-    print("Splitting the data set...")
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_full, y_full, test_size=0.1, random_state=1)
+        X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
+    else:
+        print("Splitting the data set...")
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_full, y_full, test_size=0.1, random_state=1)
 
     # Optionally extend the data set by using distortions
     if (option_set("--distort-shift")):
@@ -45,9 +44,9 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
-    if (option_set("knn")):
-        cls_knn.knn_svd_pca(X_full, y_full, output_result)
     if (option_set("knn-pca")):
+        cls_knn.knn_svd_pca(X_full, y_full, output_result)
+    if (option_set("knn")):
         cls_knn.testAccuracy(X_train, y_train, X_test, y_test, 0,
                              output_result)
     if (option_set("svc")):
@@ -66,14 +65,20 @@ def option_set(option):
 def cherry_pick_data_set(amount, X_full, y_full):
     length = len(X_full)
     step = round(length / 10)
-    X_small = []
-    y_small = []
-    #X_small.append(X_full[0:length:step])
+    X_train = []
+    X_test = []
+    y_train = []
+    y_test = []
     for i in range(10):
-        X_small.extend(X_full[step * i:(step * i + amount)])
-        y_small.extend(y_full[step * i:(step * i + amount)])
-    return np.array(X_small), np.array(y_small)
-
+        X_train_temp, X_test_temp, y_train_temp, y_test_temp = train_test_split(
+            X_full[step * i:(step * (i + 1))]
+            , y_full[step * i:(step * (i + 1))]
+            , test_size=(1-(amount/step)), random_state=1)
+        X_train.extend(X_train_temp)
+        X_test.extend(X_test_temp)
+        y_train.extend(y_train_temp)
+        y_test.extend(y_test_temp)
+    return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
 def output_result(model, X_train, y_train, X_test, y_test):
     train_acc = str(model.score(X_train, y_train))
