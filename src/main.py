@@ -76,25 +76,32 @@ def cherry_pick_data_set(amount, X_full, y_full):
         y_test.extend(y_test_temp)
     return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
-def output_result(model, X_train, y_train, X_test, y_test):
-    train_acc = str(model.score(X_train, y_train))
-    test_acc = str(model.score(X_test, y_test))
-    print("Accuracy of the model on training: " + train_acc + " and test: " + test_acc + " data.")
+def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf"), time_test=float("inf")):
+    train_acc = model.score(X_train, y_train) * 100
+    test_acc = model.score(X_test, y_test) * 100
+
+    print("#>%s<#\nAccuracy:\n   Training: %.2d%% \n   Test: %.2d%% \nTime:\n   Training: %.4f\n   Test: %.4f\n\n" % (type(model).__name__, train_acc, test_acc, time_training, time_test))
+
     file_name = 'results_' + type(model).__name__ + '.csv'
     file_exists = os.path.isfile(file_name)
 
     with open(file_name, 'a') as csvfile:
-        fieldnames = ['train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape']
+        fieldnames = [
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test'
+        ]
         fieldnames = fieldnames + list(model.get_params().keys())
         fieldnames.sort()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         data = {
-            'train_accuracy': train_acc,
-            'test_accuracy': test_acc,
+            'train_accuracy': str(train_acc),
+            'test_accuracy': str(test_acc),
             'cls_name': type(model).__name__,
             'train_shape': str(X_train.shape),
-            'test_shape': str(X_test.shape)
+            'test_shape': str(X_test.shape),
+            'time_training': str(time_training),
+            'time_test': str(time_test),
+
         }
         data = {**data, **model.get_params()}
 
