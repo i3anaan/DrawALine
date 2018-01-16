@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import math
-
+import time
 import feat_pca
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -33,16 +33,18 @@ def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
     for w in weights:
         for k in kVals:
             # train the k-Nearest Neighbor classifier with the current value of `k`
+            time_start = time.time()
             model = KNeighborsClassifier(n_neighbors=k, weights=w)
             model.fit(trainData, trainLabels)
-
+            time_training = time.time() - time_start
             # evaluate the model and update the accuracies list
             score = model.score(valData, valLabels)
             if (k_PCA > 0):
                 print("k_PCA=%d k_NN=%d weight=%s accuracy=%.2f%%" % (k_PCA, k, w, score * 100))
             else:
                 print("k_NN=%d weight=%s accuracy=%.2f%%"  % (k, w, score * 100))
-            output_result(model, trainData, trainLabels, valData, valLabels)
+                
+            output_result(model, trainData, trainLabels, valData, valLabels, time_training)
             accuracies.append(score)
 
     # find the value of k that has the largest accuracy
