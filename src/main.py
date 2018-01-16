@@ -80,7 +80,7 @@ def cherry_pick_data_set(amount, X_full, y_full):
         y_test.extend(y_test_temp)
     return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
-def output_result(model, X_train, y_train, X_test, y_test, time_training, time_test):
+def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf"), time_test=float("inf")):
     train_acc = model.score(X_train, y_train) * 100
     test_acc = model.score(X_test, y_test) * 100
 

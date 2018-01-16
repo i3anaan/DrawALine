@@ -12,9 +12,6 @@ def extend_dataset_grow(data_X, data_y, count=1):
         output_y = output_y
     output_X = np.concatenate((data_X, output_X))
     output_y = np.concatenate((data_y, output_y))
-    for i in range(0, 10, 1):
-        print(visualize_img(data_X[i].reshape((28, 28))))
-        print(visualize_img(output_X[i].reshape((28, 28))))
 
     return (output_X, output_y)
 
