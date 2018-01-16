@@ -42,6 +42,12 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
+    if (option_set("lda")):
+        cls_lda.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("qda")):
+        cls_qda.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("parzen")):
+        cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("knn-pca")):
         cls_knn.knn_pca(X_train, y_train, X_test, y_test, output_result)
     if (option_set("knn")):
