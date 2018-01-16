@@ -1,12 +1,17 @@
 import os
 import os.path
 import sys
+import time
+import datetime
 import scipy.io
 import numpy as np
 
 from sklearn.model_selection import train_test_split
 
 import cls_knn
+import cls_lda
+import cls_qda
+import cls_parzen
 import cls_svc
 import cls_mlp
 import cls_log
@@ -43,6 +48,12 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
+    if (option_set("lda")):
+        cls_lda.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("qda")):
+        cls_qda.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+    if (option_set("parzen")):
+        cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if (option_set("knn-pca")):
         cls_knn.knn_pca(X_train, y_train, X_test, y_test, output_result)
     if (option_set("knn")):
@@ -79,25 +90,35 @@ def cherry_pick_data_set(amount, X_full, y_full):
         y_test.extend(y_test_temp)
     return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
-def output_result(model, X_train, y_train, X_test, y_test):
-    train_acc = str(model.score(X_train, y_train))
-    test_acc = str(model.score(X_test, y_test))
-    print("Accuracy of the model on training: " + train_acc + " and test: " + test_acc + " data.")
+def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf")):
+    time_start = time.time()
+    train_acc = model.score(X_train, y_train) * 100
+    test_acc = model.score(X_test, y_test) * 100
+    time_test = time.time() - time_start
+
+    print("#>%s<#\nAccuracy:\n   Training: %.2d%% \n   Test: %.2d%% \nTime:\n   Training: %.4f\n   Test: %.4f\n\n" % (type(model).__name__, train_acc, test_acc, time_training, time_test))
+
     file_name = 'results_' + type(model).__name__ + '.csv'
     file_exists = os.path.isfile(file_name)
 
     with open(file_name, 'a') as csvfile:
-        fieldnames = ['train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape']
+        fieldnames = [
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
+        ]
         fieldnames = fieldnames + list(model.get_params().keys())
         fieldnames.sort()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         data = {
-            'train_accuracy': train_acc,
-            'test_accuracy': test_acc,
+            'train_accuracy': str(train_acc),
+            'test_accuracy': str(test_acc),
             'cls_name': type(model).__name__,
             'train_shape': str(X_train.shape),
-            'test_shape': str(X_test.shape)
+            'test_shape': str(X_test.shape),
+            'time_training': str(time_training),
+            'time_test': str(time_test),
+            'log_time': datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
+
         }
         data = {**data, **model.get_params()}
 
