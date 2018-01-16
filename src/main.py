@@ -7,6 +7,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 import cls_knn
+import cls_lda
+import cls_qda
+import cls_parzen
 import cls_svc
 import cls_mlp
 import cls_log
