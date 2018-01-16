@@ -11,6 +11,7 @@ import cls_svc
 import cls_mlp
 import cls_log
 import distortions
+import similarity
 from visualise_images import print_examples
 
 import csv
@@ -37,6 +38,15 @@ def main():
     if (option_set("--distort")):
         print("Applying distortion...")
         X_train, y_train = distortions.extend_dataset_shift(X_train, y_train)
+    if (option_set("--sim")):
+        if(option_set("dsim_edit")):
+            X_train, X_test = similarity.edit_distance_dissimilarity(X_train, X_test)
+        if(option_set("sim_norm1")):
+            X_train, X_test = similarity.norm_similarity(X_train, X_test, 1)
+        if(option_set("sim_norm2")):
+            X_train, X_test = similarity.norm_similarity(X_train, X_test, 2)
+        if(option_set("sim_cos")):
+            X_train, X_test = similarity.cosine_similarity_all(X_train, X_test)
 
     # print the shapes
     print("Training set size: " + str(X_train.shape))
