@@ -1,6 +1,7 @@
 import os
 import os.path
 import sys
+import time
 import scipy.io
 import numpy as np
 
@@ -85,9 +86,11 @@ def cherry_pick_data_set(amount, X_full, y_full):
         y_test.extend(y_test_temp)
     return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
-def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf"), time_test=float("inf")):
+def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf")):
+    time_start = time.time()
     train_acc = model.score(X_train, y_train) * 100
     test_acc = model.score(X_test, y_test) * 100
+    time_test = time.time() - time_start
 
     print("#>%s<#\nAccuracy:\n   Training: %.2d%% \n   Test: %.2d%% \nTime:\n   Training: %.4f\n   Test: %.4f\n\n" % (type(model).__name__, train_acc, test_acc, time_training, time_test))
 
