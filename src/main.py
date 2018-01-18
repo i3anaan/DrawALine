@@ -106,11 +106,11 @@ def cherry_pick_data_set(amount, X_full, y_full):
 
 def output_result(model, X_train, y_train, X_test, y_test, time_training=float("inf")):
     time_start = time.time()
-    train_acc = model.score(X_train, y_train) * 100
-    test_acc = model.score(X_test, y_test) * 100
+    train_acc = model.score(X_train, y_train) * 100.0
+    test_acc = model.score(X_test, y_test) * 100.0
     time_test = time.time() - time_start
 
-    print("#>%s<#\nAccuracy:\n   Training: %.2d%% \n   Test: %.2d%% \nTime:\n   Training: %.4f\n   Test: %.4f\n\n" % (type(model).__name__, train_acc, test_acc, time_training, time_test))
+    print("#>%s<# Train/Test: %06.2f%%/%06.2f%%  Train/Test: %.04f/%.04f" % (type(model).__name__, train_acc, test_acc, time_training, time_test))
 
     file_name = 'results_' + type(model).__name__ + '.csv'
     file_exists = os.path.isfile(file_name)
