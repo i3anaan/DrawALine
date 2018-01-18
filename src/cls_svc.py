@@ -7,7 +7,7 @@ def get_models(scenario):
         for gamma in range(-3, 2):
             for C in range(-5, 6):
                 settings = {
-                    'kernel': 'rbf'
+                    'kernel': 'rbf',
                     'gamma': 10**gamma,
                     'C': 3**C
                 }
@@ -16,7 +16,7 @@ def get_models(scenario):
         for gamma in range(-3, 2):
             for C in range(-5, 6):
                 settings = {
-                    'kernel': 'rbf'
+                    'kernel': 'rbf',
                     'gamma': 10**gamma,
                     'C': 3**C
                 }

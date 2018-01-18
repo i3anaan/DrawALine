@@ -10,6 +10,6 @@ def get_models(scenario):
     else:
         settings = {
         }
-        model.append(LinearDiscriminantAnalysis(**settings))
+        models.append(LinearDiscriminantAnalysis(**settings))
 
     return models

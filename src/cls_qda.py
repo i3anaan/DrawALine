@@ -10,6 +10,6 @@ def get_models(scenario):
     else:
         settings = {
         }
-        model.append(QuadraticDiscriminantAnalysis(**settings))
+        models.append(QuadraticDiscriminantAnalysis(**settings))
 
     return models
