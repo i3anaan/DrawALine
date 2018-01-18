@@ -67,13 +67,13 @@ def main():
             X_train, y_train = distortions.extend_dataset_grow(X_train, y_train, 1)
 
     if args.similarity is not None:
-        if 'dsim_edit' in args.distort:
+        if 'dsim_edit' in args.similarity:
             X_train, X_test = similarity.edit_distance_dissimilarity(X_train, X_test)
-        if 'sim_norm1' in args.distort:
+        if 'sim_norm1' in args.similarity:
             X_train, X_test = similarity.norm_similarity(X_train, X_test, 1)
-        if 'sim_norm2' in args.distort:
+        if 'sim_norm2' in args.similarity:
             X_train, X_test = similarity.norm_similarity(X_train, X_test, 2)
-        if 'sim_cos' in args.distort:
+        if 'sim_cos' in args.similarity:
             X_train, X_test = similarity.cosine_similarity_all(X_train, X_test)
 
     # print the shapes
