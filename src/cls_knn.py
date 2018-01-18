@@ -51,5 +51,5 @@ def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
     i = np.argmax(accuracies)
     print(
         "k_PCA=%d k_NN=%d weight=%s achieved highest accuracy of %.2f%% on validation data"
-        %(k_PCA, kVals[i%len(kVals)], weights[math.ceil(i/len(kVals))],  accuracies[i] * 100))
+        %(k_PCA, kVals[i%len(kVals)], weights[math.floor(i/len(kVals))],  accuracies[i] * 100))
     return model
