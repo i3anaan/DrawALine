@@ -6,4 +6,4 @@ install:
   - pip install -r requirements.txt
 script:
   - python src/main.py --small --distort-shift --distort-grow lda
-  -python src/main.py --test-run lda qda knn knn-pca log mlp svc
+  - python src/main.py --test-run lda qda knn knn-pca log mlp svc
