@@ -1,8 +1,8 @@
 import time
 from sklearn.neural_network import MLPClassifier
 
-
 def get_models(scenario):
+    models = []
     if scenario=='small':
         settings = {
             'alpha': 3**-4,  # 0.01
@@ -11,6 +11,7 @@ def get_models(scenario):
             'activation': 'tanh',
             'max_iter': 10000
         }
+        models.append(MLPClassifier(**settings))
     else:
         settings = {
             'alpha': 3**-4,  # 0.01
@@ -19,4 +20,6 @@ def get_models(scenario):
             'activation': 'tanh',
             'max_iter': 10000
         }
-    return [MLPClassifier(**settings)]
+        models.append(MLPClassifier(**settings))
+
+    return models

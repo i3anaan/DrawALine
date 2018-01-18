@@ -81,22 +81,26 @@ def main():
     print("Test set size:     " + str(X_test.shape))
 
     if ('lda' in args.classifiers):
-            run_batch(cls_lda, data_set, args)
+        run_batch(cls_lda, data_set, args)
     if ('qda' in args.classifiers):
-        cls_qda.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+        run_batch(cls_qda, data_set, args)
     if ('parzen' in args.classifiers):
+        # TODO
         cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if ('knn-pca' in args.classifiers):
+        # TODO
         cls_knn.knn_pca(X_train, y_train, X_test, y_test, output_result)
     if ('knn' in args.classifiers):
+        # TODO
         cls_knn.testAccuracy(X_train, y_train, X_test, y_test, 0, output_result)
     if ('svc' in args.classifiers):
-        cls_svc.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+        run_batch(cls_svc, data_set, args)
     if ('mlp' in args.classifiers):
-            run_batch(cls_mlp, data_set, args)
+        run_batch(cls_mlp, data_set, args)
     if ('log' in args.classifiers):
-        cls_log.testAccuracy(X_train, y_train, X_test, y_test, output_result)
+        run_batch(cls_log, data_set, args)
     if ('qdc' in args.classifiers):
+        # TODO
         cls_qdc.qdc_pca(X_train, y_train, X_test, y_test, output_result)
 
 
