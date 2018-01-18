@@ -31,7 +31,7 @@ def main():
     y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
     if (option_set("--test-run")):
-        X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.1, random_state=1)
+        X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
 
     # Split the data set
     if (option_set("--small")):
