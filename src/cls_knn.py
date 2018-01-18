@@ -19,9 +19,9 @@ def knn_pca(X_train, y_train, X_test, y_test, output_result):
                              output_result)
 
 
-def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
+def testAccuracy(X_train, y_train, X_test, y_test, k_PCA,
                  output_result):
-    if(len(trainLabels)>1000):
+    if(len(y_train)>1000):
         kVals = range(1, 21, 1)
     else:
         kVals = range(1, 6, 1)
@@ -35,16 +35,16 @@ def testAccuracy(trainData, trainLabels, valData, valLabels, k_PCA,
             # train the k-Nearest Neighbor classifier with the current value of `k`
             time_start = time.time()
             model = KNeighborsClassifier(n_neighbors=k, weights=w)
-            model.fit(trainData, trainLabels)
+            model.fit(X_train, y_train)
             time_training = time.time() - time_start
             # evaluate the model and update the accuracies list
-            score = model.score(valData, valLabels)
+            score = model.score(X_test, y_test)
             if (k_PCA > 0):
                 print("k_PCA=%d k_NN=%d weight=%s accuracy=%.2f%%" % (k_PCA, k, w, score * 100))
             else:
                 print("k_NN=%d weight=%s accuracy=%.2f%%"  % (k, w, score * 100))
                 
-            output_result(model, trainData, trainLabels, valData, valLabels, time_training)
+            output_result(model, X_train, y_train, X_test, y_test, time_training)
             accuracies.append(score)
 
     # find the value of k that has the largest accuracy
