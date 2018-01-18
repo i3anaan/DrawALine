@@ -5,8 +5,8 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python src/main.py mlp --test-run
-  - python src/main.py log --test-run --distort=both
+  - python src/main.py log --test-run
+  - python src/main.py mlp --test-run --distort=both
   - python src/main.py qda --test-run --small
   - python src/main.py svc --test-run --similarity=sim_cos
   - python src/main.py lda --small
