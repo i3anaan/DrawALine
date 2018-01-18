@@ -1,6 +1,5 @@
 #CUSTOM:
-src/results_*
-results_*
+results/*
 
 
 # Byte-compiled / optimized / DLL files

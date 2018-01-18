@@ -183,7 +183,7 @@ def print_results(model, data_set, results):
 
 
 def log_results(model, data_set, results):
-    file_name = 'results/results_' + type(model).__name__ + '.csv'
+    file_name = os.path.dirname(full_path) + '/../results/results_' + type(model).__name__ + '.csv'
     file_exists = os.path.isfile(file_name)
 
     with open(file_name, 'a') as csvfile:
