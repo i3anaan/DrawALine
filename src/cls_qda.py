@@ -1,15 +1,13 @@
-import time
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+
 
 def get_models(scenario):
     models = []
-    if scenario=='small':
-        settings = {
-        }
+    if scenario == 'small':
+        settings = {}
         models.append(QuadraticDiscriminantAnalysis(**settings))
     else:
-        settings = {
-        }
+        settings = {}
         models.append(QuadraticDiscriminantAnalysis(**settings))
 
     return models

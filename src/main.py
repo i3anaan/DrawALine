@@ -17,15 +17,16 @@ import cls_svc
 import cls_mlp
 import cls_log
 import cls_qdc
+
 import distortions
 import similarity
-from visualise_images import print_examples
+import feat_pca
+
 
 import csv
 
 
 def main():
-
     args = parse_arguments()
 
     scenario = 'small' if args.small else 'big'
@@ -37,25 +38,18 @@ def main():
     X_full = np.array([x.reshape((784,)) for x in X_full])
     y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
 
-
     # Do an implementation test run on tiny data set
     if (args.test_run):
+        print("Using test run data set...")
         X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
-
-    # Split the data set
-    if (args.small and not args.test_run):
-        print("Cherry picking data set...")
-        X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
     else:
-        print("Splitting the data set...")
-        X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
-
-    data_set = {
-        'X_train': X_train,
-        'y_train': y_train,
-        'X_test': X_test,
-        'y_test': y_test,
-    }
+        # Split the data set
+        if (args.small):
+            print("Cherry picking data set...")
+            X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
+        else:
+            print("Splitting the data set...")
+            X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
     if args.distort is not None:
         # Extend the data set by using distortions
@@ -67,6 +61,7 @@ def main():
             X_train, y_train = distortions.extend_dataset_grow(X_train, y_train, 1)
 
     if args.similarity is not None:
+        print("Applying similarity transformation...")
         if 'dsim_edit' in args.similarity:
             X_train, X_test = similarity.edit_distance_dissimilarity(X_train, X_test)
         if 'sim_norm1' in args.similarity:
@@ -75,6 +70,17 @@ def main():
             X_train, X_test = similarity.norm_similarity(X_train, X_test, 2)
         if 'sim_cos' in args.similarity:
             X_train, X_test = similarity.cosine_similarity_all(X_train, X_test)
+
+    if args.pca is not None:
+            print("Applying PCA feature extraction...")
+            X_train, X_test = feat_pca.pca(X_train, X_test, args.pca)
+
+    data_set = {
+        'X_train': X_train,
+        'y_train': y_train,
+        'X_test': X_test,
+        'y_test': y_test,
+    }
 
     # print the shapes
     print("Training set size: " + str(X_train.shape))
@@ -113,6 +119,7 @@ def parse_arguments():
     parser.add_argument('--small', help='Use a small training set', action='store_true')
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
+    parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
 
     args = parser.parse_args()
 

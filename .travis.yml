@@ -5,6 +5,7 @@ python:
 install:
   - pip install -r requirements.txt
 script:
+  - python src/main.py knn --test-run --pca=43
   - python src/main.py log --test-run
   - python src/main.py mlp --test-run --distort=all
   - python src/main.py qda --test-run --small
