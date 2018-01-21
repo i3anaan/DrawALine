@@ -2,11 +2,11 @@ import os
 import os.path
 import sys
 import time
+import csv
 import datetime
+import argparse
 import scipy.io
 import numpy as np
-import argparse
-
 from sklearn.model_selection import train_test_split
 
 import cls_knn
@@ -16,14 +16,10 @@ import cls_parzen
 import cls_svc
 import cls_mlp
 import cls_log
-import cls_qdc
 
 import distortions
 import similarity
 import feat_pca
-
-
-import csv
 
 
 def main():
@@ -42,14 +38,14 @@ def main():
     if (args.test_run):
         print("Using test run data set...")
         X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
+
+    # Split the data set
+    if (args.small and not args.test_run):
+        print("Cherry picking data set...")
+        X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
     else:
-        # Split the data set
-        if (args.small):
-            print("Cherry picking data set...")
-            X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
-        else:
-            print("Splitting the data set...")
-            X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
+        print("Splitting the data set...")
+        X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
     if args.distort is not None:
         # Extend the data set by using distortions
@@ -92,22 +88,16 @@ def main():
         run_batch(cls_qda, data_set, args)
     if ('parzen' in args.classifiers):
         # TODO
-        cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
-    if ('knn-pca' in args.classifiers):
-        # TODO
-        cls_knn.knn_pca(X_train, y_train, X_test, y_test, output_result)
+        print("ERROR: Parzen does not work correctly yet and is disabled")
+        # cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
     if ('knn' in args.classifiers):
-        # TODO
-        cls_knn.testAccuracy(X_train, y_train, X_test, y_test, 0, output_result)
+        run_batch(cls_knn, data_set, args)
     if ('svc' in args.classifiers):
         run_batch(cls_svc, data_set, args)
     if ('mlp' in args.classifiers):
         run_batch(cls_mlp, data_set, args)
     if ('log' in args.classifiers):
         run_batch(cls_log, data_set, args)
-    if ('qdc' in args.classifiers):
-        # TODO
-        cls_qdc.qdc_pca(X_train, y_train, X_test, y_test, output_result)
 
 
 def parse_arguments():
