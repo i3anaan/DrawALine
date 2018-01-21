@@ -20,4 +20,4 @@ def get_models(scenario):
 
 
 def declare_settings(subparser):
-    # No settings
+    return

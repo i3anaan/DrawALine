@@ -31,4 +31,7 @@ def get_models(scenario):
 
 
 def declare_settings(subparser):
-    # No settings
+    subparser.add_argument('--alpha', help='The alpha setting', action='store', type=float)
+    subparser.add_argument('--activation', help='The activation setting', action='store', choices=['identity', 'logistic', 'tanh', 'relu'])
+    # TODO: How to add hidden layer sizes here?
+    return

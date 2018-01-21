@@ -23,7 +23,7 @@ def get_models(args):
     return models
 
 def declare_settings(subparser):
-
     subparser.add_argument('--gamma', help='The gamma setting', action='store', type=float)
     subparser.add_argument('--C', help='The C setting', action='store', type=float)
     subparser.add_argument('--kernel', help='The kernel setting', action='store', choices=['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'])
+    return

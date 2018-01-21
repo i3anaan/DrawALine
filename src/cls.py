@@ -3,9 +3,11 @@ import json
 def check_settings(args, classifier):
     override = {}
     for param in classifier().get_params():
-        if param in vars(args):
+        if param in vars(args) and vars(args)[param] is not None:
             override[param] = vars(args)[param]
-    print(override)
+    if override:
+        print("Overriding settings...")
+        print(override)
     return override
 
 def override_settings(args, settings, classifier):

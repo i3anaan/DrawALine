@@ -22,4 +22,5 @@ def get_models(scenario):
 
 
 def declare_settings(subparser):
-    # No settings
+    subparser.add_argument('--C', help='The C setting', action='store', type=float)
+    return

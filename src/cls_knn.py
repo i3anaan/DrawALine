@@ -16,7 +16,7 @@ def get_models(scenario):
                     'n_neighbors': k,
                     'weights': weight,
                 }
-                settings.append(setting))
+                settings.append(setting)
     else:
         # Large
         for weight in ['uniform', 'distance']:
@@ -25,7 +25,7 @@ def get_models(scenario):
                     'n_neighbors': k,
                     'weights': weight,
                 }
-                settings.append(setting))
+                settings.append(setting)
 
     settings = cls.override_settings(args, settings, SVC)
     models = cls.models_from_settings(settings, SVC)
@@ -33,4 +33,6 @@ def get_models(scenario):
 
 
 def declare_settings(subparser):
-    # No settings
+    subparser.add_argument('--k', help='The k setting', action='store', type=int)
+    subparser.add_argument('--weights', help='The k setting', action='store', choices=['uniform', 'distance'])
+    return
