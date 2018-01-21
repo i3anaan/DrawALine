@@ -33,6 +33,6 @@ def get_models(args):
 
 
 def declare_settings(subparser):
-    subparser.add_argument('--k', help='The k setting', action='store', type=int)
+    subparser.add_argument('--n_neighbors', help='The amount of neighbours setting', action='store', type=int)
     subparser.add_argument('--weights', help='The weights setting', action='store', choices=['uniform', 'distance'])
     return
