@@ -23,10 +23,10 @@ import feat_pca
 
 
 def main():
-    args = parse_arguments()
 
-    scenario = 'small' if args.small else 'big'
-    print(scenario)
+    classifiers = {'svc': cls_svc,'lda': cls_lda,'qda': cls_qda,'knn': cls_knn,'mlp': cls_mlp,'log': cls_log}
+
+    args = parse_arguments(classifiers)
 
     # load the data
     full_path = os.path.realpath(__file__)
@@ -82,37 +82,28 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
-    if ('lda' in args.classifiers):
-        run_batch(cls_lda, data_set, args)
-    if ('qda' in args.classifiers):
-        run_batch(cls_qda, data_set, args)
-    if ('parzen' in args.classifiers):
-        # TODO
-        print("ERROR: Parzen does not work correctly yet and is disabled")
-        # cls_parzen.testAccuracy(X_train, y_train, X_test, y_test, output_result)
-    if ('knn' in args.classifiers):
-        run_batch(cls_knn, data_set, args)
-    if ('svc' in args.classifiers):
-        run_batch(cls_svc, data_set, args)
-    if ('mlp' in args.classifiers):
-        run_batch(cls_mlp, data_set, args)
-    if ('log' in args.classifiers):
-        run_batch(cls_log, data_set, args)
+
+    if (args.classifier in classifiers):
+        run_batch(classifiers[args.classifier], data_set, args)
 
 
-def parse_arguments():
+def parse_arguments(classifiers):
     parser = argparse.ArgumentParser(prog='DrawALine', description='Pattern Recognition tool for recognizing decimals from the NIST data set.')
-    parser.add_argument('classifiers', help='The classifiers to run', nargs='+', choices=['lda', 'qda', 'parzen', 'knn', 'knn-pca', 'svc', 'mlp', 'log', 'qdc'])
+    # parser.add_argument('classifiers', help='The classifiers to run', nargs='+', choices=['lda', 'qda', 'parzen', 'knn', 'knn-pca', 'mlp', 'log', 'qdc'])
 
-
+    # General commands
     parser.add_argument('--test-run', help='Run in implementation test mode - use a tiny data set', action='store_true')
     parser.add_argument('--small', help='Use a small training set', action='store_true')
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
 
-    args = parser.parse_args()
+    # Add classifiers...
+    subparsers = parser.add_subparsers(help='classifiers', dest='classifier')
+    for classifier in classifiers.keys():
+        classifiers[classifier].declare_settings(subparsers.add_parser(classifier))
 
+    args = parser.parse_args()
     return args
 
 def option_set(option):
@@ -138,7 +129,7 @@ def cherry_pick_data_set(amount, X_full, y_full):
 
 
 def run_batch(cls, data_set, args):
-    for model in cls.get_models('small' if args.small else 'big'):
+    for model in cls.get_models(args):
         run_classifier(model, data_set, args)
 
 
