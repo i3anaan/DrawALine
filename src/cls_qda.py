@@ -2,7 +2,7 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 import cls
 
 
-def get_models(scenario):
+def get_models(args):
     settings = []
 
     if args.small is not None:
