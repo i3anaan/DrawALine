@@ -82,7 +82,6 @@ def main():
         cls_qdc.qdc_pca(X_train, y_train, X_test, y_test, output_result)
 
 
-
 def option_set(option):
     return (option in sys.argv)
 
@@ -117,7 +116,7 @@ def output_result(model, X_train, y_train, X_test, y_test, time_training=float("
 
     with open(file_name, 'a') as csvfile:
         fieldnames = [
-            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
+            'sore ', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
         ]
         fieldnames = fieldnames + list(model.get_params().keys())
         fieldnames.sort()
