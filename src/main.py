@@ -85,11 +85,12 @@ def main():
 
     if (args.classifier in classifiers):
         run_batch(classifiers[args.classifier], data_set, args)
+    else:
+        print("ERROR: Classifier not properly declared")
 
 
 def parse_arguments(classifiers):
     parser = argparse.ArgumentParser(prog='DrawALine', description='Pattern Recognition tool for recognizing decimals from the NIST data set.')
-    # parser.add_argument('classifiers', help='The classifiers to run', nargs='+', choices=['lda', 'qda', 'parzen', 'knn', 'knn-pca', 'mlp', 'log', 'qdc'])
 
     # General commands
     parser.add_argument('--test-run', help='Run in implementation test mode - use a tiny data set', action='store_true')
@@ -98,16 +99,13 @@ def parse_arguments(classifiers):
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
 
-    # Add classifiers...
+    # Add classifiers sub-settings...
     subparsers = parser.add_subparsers(help='classifiers', dest='classifier')
     for classifier in classifiers.keys():
         classifiers[classifier].declare_settings(subparsers.add_parser(classifier))
 
     args = parser.parse_args()
     return args
-
-def option_set(option):
-    return (option in sys.argv)
 
 
 def cherry_pick_data_set(amount, X_full, y_full):
