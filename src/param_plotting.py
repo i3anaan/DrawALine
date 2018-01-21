@@ -5,6 +5,8 @@ these hyperparameters are optimized with respect to the cross-validation set.
 
 import matplotlib.pyplot as plt
 import csv
+import numpy as np
+from scipy.interpolate import interp1d
 
 # default values to check for regularization
 reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
@@ -21,7 +23,9 @@ def make_graph(arr, labels):
     i = 0
     for line in arr:
         (x, y) = line
-        plt.plot(x, y, linestyle='--', marker='o', label = labels[i])
+        #f = interp1d(x, y, kind='cubic')
+        #xnew = np.linspace(0, 10, num=41, endpoint=True)
+        plt.plot(x, y, '-o', label = labels[i]) #x, f(x), '-',
         i= i+1
     return plt
 
@@ -78,6 +82,19 @@ def make_plot_cls(model, xCol, yCol, rowDictValues):
             #plots.append(rows)
     return plots
 
+def plot_AA():
+    d = {'edge_prob': '0.5'}
+    xAxis = 'max_weight'
+    yAxis = ' time'
+    plt = make_plot_cls_group_by_row('output_graphsData1.csv', xAxis, yAxis, 'vertices', d)
+    plt.ylabel(yAxis + ' [ms]')
+    plt.xlabel('weight class')#xAxis + ' amount')
+    #plt.title('Accuracy of the algorithm with respect to maximal weight')#('Computational time with respect to the maximal weight')
+    #plt.yscale('logit')
+    #plt.grid(True)
+    plt.legend()
+    plt.show()
+
 def make_plot_cls_group_by_row(model, xCol, yCol, label, rowValues):
     """
     :xCol - column of values for x Axis
@@ -86,13 +103,13 @@ def make_plot_cls_group_by_row(model, xCol, yCol, label, rowValues):
     :rowValues is a single directory that takes only those rows, that have a value specified in directory
 
     """
-    file_name = 'results_' + model + '.csv' #type(model).__name__
+    file_name = model#'results_' + model + '.csv' #type(model).__name__
     plots= []
     with open(file_name, 'r') as f:
         d_reader = csv.DictReader(f)
-        #headers = d_reader.fieldnames
-        #index = headers.index(label)
-        #print(headers, index)
+        headers = d_reader.fieldnames
+        index = headers.index(label)
+        print(headers, index)
         rows = {}; xRows = {}; yRows = {};
         for row in d_reader:
             for key,value in rowValues.items():
@@ -105,9 +122,10 @@ def make_plot_cls_group_by_row(model, xCol, yCol, label, rowValues):
                     rows[row[label]] = []
                     xRows[row[label]] = []
                     yRows[row[label]] = []
-                rows[row[label]].append((num(row[xCol]), num(row[yCol])))
-                xRows[row[label]].append(num(row[xCol]))
-                yRows[row[label]].append(num(row[yCol]))
+                print(row[yCol])
+                rows[row[label]].append((float(row[xCol]), float(row[yCol])))
+                xRows[row[label]].append(float(row[xCol]))
+                yRows[row[label]].append(float(row[yCol]))
         labels = []
         print(xRows)
         for k in xRows:
@@ -122,7 +140,7 @@ def num(s):
     except ValueError:
         return float(s)
 
-plot_from_file()
+plot_AA()
 
 def training_size_classification_error(model, sizes, training_set, test_set):
     """
