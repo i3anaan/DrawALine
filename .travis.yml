@@ -6,7 +6,7 @@ install:
   - pip install -r requirements.txt
 script:
   - python src/main.py --test-run --pca=43 knn --k=2 --weights=distance
-  - python src/main.py --test-run log --c=3
+  - python src/main.py --test-run log --C=3
   - python src/main.py --test-run --distort=all mlp --alpha=0.01 --activation='tanh'
   - python src/main.py --test-run --small qda
   - python src/main.py --test-run --similarity=sim_cos svc --gamma=3 --C=3 --kernel=sigmoid

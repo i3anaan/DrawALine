@@ -25,8 +25,8 @@ def get_models(args):
         }
         settings.append(setting)
 
-    settings = cls.override_settings(args, settings, SVC)
-    models = cls.models_from_settings(settings, SVC)
+    settings = cls.override_settings(args, settings, MLPClassifier)
+    models = cls.models_from_settings(settings, MLPClassifier)
     return models
 
 

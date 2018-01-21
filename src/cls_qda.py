@@ -14,8 +14,8 @@ def get_models(args):
         setting = {}
         settings.append(setting)
 
-    settings = cls.override_settings(args, settings, SVC)
-    models = cls.models_from_settings(settings, SVC)
+    settings = cls.override_settings(args, settings, QuadraticDiscriminantAnalysis)
+    models = cls.models_from_settings(settings, QuadraticDiscriminantAnalysis)
     return models
 
 

@@ -16,8 +16,8 @@ def get_models(args):
             setting = {'max_iter': 1000, 'C': 3**C}
             settings.append(setting)
 
-    settings = cls.override_settings(args, settings, SVC)
-    models = cls.models_from_settings(settings, SVC)
+    settings = cls.override_settings(args, settings, LogisticRegression)
+    models = cls.models_from_settings(settings, LogisticRegression)
     return models
 
 
