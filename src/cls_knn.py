@@ -12,7 +12,7 @@ from sklearn.neighbors import KNeighborsClassifier
 #k_NN = 1; k_PCA = 43 and 44 -> 97.80%
 #without PCA: K_NN = 1 -> 96.00% very slow!
 def knn_pca(X_train, y_train, X_test, y_test, output_result):
-    for k_PCA in range(30, 51, 1):
+    for k_PCA in range(37, 51, 1):
         X_feat_train, X_feat_test = feat_pca.pca(X_train, X_test, k_PCA)
 
         model = testAccuracy(X_feat_train, y_train, X_feat_test, y_test, k_PCA,

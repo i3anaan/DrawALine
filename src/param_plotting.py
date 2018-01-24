@@ -3,8 +3,10 @@ Functions to visualise the quality of the model with respect to its hyperparamet
 these hyperparameters are optimized with respect to the cross-validation set.
 """
 
-import matplotlib.pyplot as plt
 import csv
+import cls_types
+import matplotlib.pyplot as plt
+import sys
 
 # default values to check for regularization
 reg_values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
@@ -23,23 +25,29 @@ def make_graph(arr, labels):
         (x, y) = line
         plt.plot(x, y, linestyle='--', marker='o', label = labels[i])
         i= i+1
+    #plt.xticks(range(min(arr[0][0]) - 1, max(arr[0][0])+1, 2)) #ticks
     return plt
 
 def plot_from_file():
-    cls = 'KNeighborsClassifier'
-    labels = ['uniform', 'distance']
+    if len(sys.argv) < 4 | len(sys.argv) > 5:
+        print("Param plotting usage: <classifier> <xAxis> <yAxis> <labels> ")
+        return
+    print(sys.argv[1])
+    cls = cls_types.get_type(sys.argv[1])
+    xAxis = sys.argv[2]#'n_neighbors'
+    yAxis = sys.argv[3]#'test_accuracy'
+    label = sys.argv[4]
     #oneDict = {'weights': 'uniform', 'test_shape': '(1000, 30)' } 
     #secDict = {'weights': 'distance', 'test_shape': '(1000, 30)' } 
     allDict = []
     rowDict = {'test_shape': '(1000, 30)' }
-    for lab in labels:
-        dict = {'weights': lab, 'test_shape': '(1000, 30)' } 
-        allDict.append(dict)
-    xAxis = 'n_neighbors'
-    yAxis = 'test_accuracy'
+    #for lab in labels:
+    #    dict = {'weights': lab, 'test_shape': '(1000, 30)' } 
+    #    allDict.append(dict)
+
     #plots2 = make_plot_cls(cls, xAxis, yAxis, allDict)
     #plt = make_graph(plots, labels)
-    plt = make_plot_cls_group_by_row(cls, xAxis, yAxis, 'weights', rowDict)
+    plt = make_plot_cls_group_by_row(cls, xAxis, yAxis, label, rowDict)
     plt.ylabel(yAxis)
     plt.xlabel(xAxis)
     plt.title(cls)

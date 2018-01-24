@@ -116,7 +116,7 @@ def output_result(model, X_train, y_train, X_test, y_test, time_training=float("
 
     with open(file_name, 'a') as csvfile:
         fieldnames = [
-            'sore ', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
+            'train_accuracy', 'test_accuracy', 'cls_name', 'train_shape', 'test_shape', 'time_training', 'time_test', 'log_time'
         ]
         fieldnames = fieldnames + list(model.get_params().keys())
         fieldnames.sort()

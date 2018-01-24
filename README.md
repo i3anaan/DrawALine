@@ -1,6 +1,6 @@
 # Drawing A Line
 
-The not-so-trivial proces of pattern recognition
+The not-so-trivial process of pattern recognition
 
 ## Getting it to work
 
