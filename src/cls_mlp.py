@@ -1,19 +1,37 @@
-import time
 from sklearn.neural_network import MLPClassifier
+import cls
 
 
-def testAccuracy(X_train, y_train, X_test, y_test, output_result):
+def get_models(args):
+    settings = []
 
-    for activation in ['identity', 'logistic', 'tanh', 'relu']:
-        for alpha in range(-5,5):
-            time_start = time.time()
-            model = MLPClassifier(
-                alpha=3**alpha,  # 0.01
-                hidden_layer_sizes=(800, 200, 30),  # 800, 200, 30 -> 97.6
-                random_state=1,
-                activation=activation,
-                max_iter=10000)
+    if args.small is not None:
+        # Small
+        setting = {
+            'alpha': 3**-4,
+            'hidden_layer_sizes': (800, 200, 30),
+            'random_state': 1,
+            'activation': 'tanh',
+            'max_iter': 10000
+        }
+        settings.append(setting)
+    else:
+        setting = {
+            'alpha': 3**-4,
+            'hidden_layer_sizes': (800, 200, 30),
+            'random_state': 1,
+            'activation': 'tanh',
+            'max_iter': 10000
+        }
+        settings.append(setting)
 
-            model.fit(X_train, y_train)
-            time_training = time.time() - time_start
-            output_result(model, X_train, y_train, X_test, y_test, time_training)
+    settings = cls.override_settings(args, settings, MLPClassifier)
+    models = cls.models_from_settings(settings, MLPClassifier)
+    return models
+
+
+def declare_settings(subparser):
+    subparser.add_argument('--alpha', help='The alpha setting', action='store', type=float)
+    subparser.add_argument('--activation', help='The activation setting', action='store', choices=['identity', 'logistic', 'tanh', 'relu'])
+    # TODO: How to add hidden layer sizes here?
+    return

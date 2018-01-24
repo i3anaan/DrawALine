@@ -1,10 +1,23 @@
-import time
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+import cls
 
 
-def testAccuracy(X_train, y_train, X_test, y_test, output_result):
-    time_start = time.time()
-    model = QuadraticDiscriminantAnalysis()
-    model.fit(X_train, y_train)
-    time_training = time.time() - time_start
-    output_result(model, X_train, y_train, X_test, y_test, time_training)
+def get_models(args):
+    settings = []
+
+    if args.small is not None:
+        # Small
+        setting = {}
+        settings.append(setting)
+    else:
+        # Large
+        setting = {}
+        settings.append(setting)
+
+    settings = cls.override_settings(args, settings, QuadraticDiscriminantAnalysis)
+    models = cls.models_from_settings(settings, QuadraticDiscriminantAnalysis)
+    return models
+
+
+def declare_settings(subparser):
+    return

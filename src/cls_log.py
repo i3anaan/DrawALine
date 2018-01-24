@@ -1,12 +1,26 @@
-import time
 from sklearn.linear_model import LogisticRegression
+import cls
 
 
-def testAccuracy(X_train, y_train, X_test, y_test, output_result):
+def get_models(args):
+    settings = []
 
-    for C in range(-5, 6):
-        time_start = time.time()
-        model = LogisticRegression(max_iter=1000, C=3**C)
-        model.fit(X_train, y_train)
-        time_training = time.time() - time_start
-        output_result(model, X_train, y_train, X_test, y_test, time_training)
+    if args.small is not None:
+        # Small
+        for C in range(-5, 6):
+            setting = {'max_iter': 1000, 'C': 3**C}
+            settings.append(setting)
+    else:
+        # Large
+        for C in range(-5, 6):
+            setting = {'max_iter': 1000, 'C': 3**C}
+            settings.append(setting)
+
+    settings = cls.override_settings(args, settings, LogisticRegression)
+    models = cls.models_from_settings(settings, LogisticRegression)
+    return models
+
+
+def declare_settings(subparser):
+    subparser.add_argument('--C', help='The C setting', action='store', type=float)
+    return
