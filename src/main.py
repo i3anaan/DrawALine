@@ -106,6 +106,10 @@ def parse_arguments(classifiers):
 
     args = parser.parse_args()
     return args
+  
+  
+def option_set(option):
+    return (option in sys.argv)
 
 
 def cherry_pick_data_set(amount, X_full, y_full):
