@@ -45,6 +45,7 @@ def main():
     else:
         X_train, y_train = load_data_set('data28', 'labels28')
         X_test, y_test = load_data_set('data_eval', 'labels_eval')
+        X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
 
 
     if args.distort is not None:
@@ -110,6 +111,7 @@ def parse_arguments(classifiers):
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
     parser.add_argument('--evaluate', help='Evaluate on a seperate dataset (uses the entire default data-set for training)', action='store_true')
+    parser.add_argument('--digits-per-class', help='The number of digits per class to use for testing in evaluation mode', action='store', type=int, default=10)
 
     # Add classifiers sub-settings...
     subparsers = parser.add_subparsers(help='classifiers', dest='classifier')
