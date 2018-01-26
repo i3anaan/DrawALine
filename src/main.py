@@ -30,7 +30,7 @@ def main():
 
     full_path = os.path.realpath(__file__)
     if (not args.evaluate):
-        X_full, y_full = load_data_set(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')
+        X_full, y_full = load_data_set('data28', 'labels28')
         # Do an implementation test run on tiny data set
         if (args.test_run):
             print("Using test run data set...")
@@ -43,8 +43,8 @@ def main():
             print("Splitting the data set...")
             X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
     else:
-        X_train, y_train = load_data_set(os.path.dirname(full_path) + 'data28.mat')
-        X_test, y_test = load_data_set(os.path.dirname(full_path) + '/../matlabFiles/evaluate.mat')
+        X_train, y_train = load_data_set('data28', 'labels28')
+        X_test, y_test = load_data_set('data_eval', 'labels_eval')
 
 
     if args.distort is not None:
@@ -89,12 +89,13 @@ def main():
         print("ERROR: Classifier not properly declared")
 
 
-def load_data_set(filename):
-    # load the data
+def load_data_set(data_name, labels_name):
     full_path = os.path.realpath(__file__)
-    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/' + filename)['data28'][0]
+    dir = os.path.dirname(full_path) + '/../matlabFiles/'
+    # load the data
+    X_full = scipy.io.loadmat(dir + data_name + '.mat')[data_name][0]
     X_full = np.array([x.reshape((784,)) for x in X_full])
-    y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/' + filename)['labels28'].ravel() - 1
+    y_full = scipy.io.loadmat(dir + labels_name + '.mat')[labels_name].ravel() - 1
 
     return X_full, y_full
 
