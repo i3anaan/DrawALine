@@ -29,10 +29,7 @@ def main():
     args = parse_arguments(classifiers)
 
     # load the data
-    full_path = os.path.realpath(__file__)
-    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
-    X_full = np.array([x.reshape((784,)) for x in X_full])
-    y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
+    X_full, y_full = load_data('prnist') #eval for the nist_eval
 
     # Do an implementation test run on tiny data set
     if (args.test_run):
@@ -87,6 +84,18 @@ def main():
         run_batch(classifiers[args.classifier], data_set, args)
     else:
         print("ERROR: Classifier not properly declared")
+
+def load_data(type):
+    full_path = os.path.realpath(__file__)
+    if type == 'prnist':
+        X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
+        X_full = np.array([x.reshape((784,)) for x in X_full])
+        y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
+    else:
+        file = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/nisteval.mat')
+        X_full = np.array([x.reshape(28,28, order='F') for x in file['nistevaldata']])
+        y_full = file['nistevallabels'].ravel() - 1
+    return X_full, y_full
 
 
 def parse_arguments(classifiers):
