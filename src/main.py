@@ -27,22 +27,20 @@ def main():
     classifiers = {'svc': cls_svc,'lda': cls_lda,'qda': cls_qda,'knn': cls_knn,'mlp': cls_mlp,'log': cls_log}
 
     args = parse_arguments(classifiers)
-
-    if (not args.evaluate):
-        X_full, y_full = load_data('prnist') #eval for the nist_eval
-        # Do an implementation test run on tiny data set
-        if (args.test_run):
-            print("Using test run data set...")
-            X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
-        # Split the data set
-        if (args.small and not args.test_run):
-            print("Cherry picking data set...")
-            X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
-        else:
-            print("Splitting the data set...")
-            X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
+    X_full, y_full = load_data('prnist') #eval for the nist_eval
+    if (args.test_run):
+        print("Using test run data set...")
+        X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
+    if (args.small and not arg.test_run):
+        print("Cherry picking data set...")
+        X_train, X_test, y_train, y_test  = cherry_pick_data_set(10, X_full, y_full)
     else:
-        X_train, y_train = load_data('prnist')
+        print("Splitting the data set...")
+        X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
+
+    if (args.evaluate):
+        X_train = X_full
+        y_train = y_full
         X_test, y_test = load_data('eval')
         X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
 
@@ -82,7 +80,6 @@ def main():
     print("Training set size: " + str(X_train.shape))
     print("Test set size:     " + str(X_test.shape))
 
-
     if (args.classifier in classifiers):
         run_batch(classifiers[args.classifier], data_set, args)
     else:
@@ -96,7 +93,8 @@ def load_data(type):
         y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
     else:
         file = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/nisteval.mat')
-        X_full = np.array([x.reshape((784,)) for x in file['nistevaldata']])
+        X_full = np.array([x.reshape((28,28), order='F') for x in file['nistevaldata']])
+        X_full = np.array([x.reshape((784,)) for x in X_full])
         y_full = file['nistevallabels'].ravel() - 1
     return X_full, y_full
 
