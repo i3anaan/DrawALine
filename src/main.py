@@ -32,7 +32,6 @@ def main():
         print("Using test run data set...")
         X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
     if (args.small and not arg.test_run):
-        print("Cherry picking data set...")
         X_train, X_test, y_train, y_test  = cherry_pick_data_set(10, X_full, y_full)
     else:
         print("Splitting the data set...")
@@ -41,9 +40,11 @@ def main():
     if (args.evaluate):
         X_train = X_full
         y_train = y_full
+        if (args.small and not arg.test_run):
+            X_train, X__, y_train, y__  = cherry_pick_data_set(10, X_full, y_full)
+
         X_test, y_test = load_data('eval')
         X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
-
 
     if args.distort is not None:
         # Extend the data set by using distortions
@@ -121,6 +122,8 @@ def parse_arguments(classifiers):
 
 
 def cherry_pick_data_set(amount, X_full, y_full):
+    print("Cherry picking data set...")
+
     length = len(X_full)
     step = round(length / 10)
     X_train = []
