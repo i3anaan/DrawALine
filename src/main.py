@@ -31,7 +31,7 @@ def main():
     if (args.test_run):
         print("Using test run data set...")
         X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
-    if (args.small and not arg.test_run):
+    if (args.small and not args.test_run):
         X_train, X_test, y_train, y_test  = cherry_pick_data_set(10, X_full, y_full)
     else:
         print("Splitting the data set...")
@@ -40,7 +40,7 @@ def main():
     if (args.evaluate):
         X_train = X_full
         y_train = y_full
-        if (args.small and not arg.test_run):
+        if (args.small and not args.test_run):
             X_train, X__, y_train, y__  = cherry_pick_data_set(10, X_full, y_full)
 
         X_test, y_test = load_data('eval')
