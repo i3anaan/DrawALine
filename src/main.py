@@ -28,24 +28,24 @@ def main():
 
     args = parse_arguments(classifiers)
 
-    # load the data
     full_path = os.path.realpath(__file__)
-    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
-    X_full = np.array([x.reshape((784,)) for x in X_full])
-    y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
-
-    # Do an implementation test run on tiny data set
-    if (args.test_run):
-        print("Using test run data set...")
-        X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
-
-    # Split the data set
-    if (args.small and not args.test_run):
-        print("Cherry picking data set...")
-        X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
+    if (not args.evaluate):
+        X_full, y_full = load_data_set(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')
+        # Do an implementation test run on tiny data set
+        if (args.test_run):
+            print("Using test run data set...")
+            X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
+        # Split the data set
+        if (args.small and not args.test_run):
+            print("Cherry picking data set...")
+            X_train, X_test, y_train, y_test = cherry_pick_data_set(10, X_full, y_full)
+        else:
+            print("Splitting the data set...")
+            X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
     else:
-        print("Splitting the data set...")
-        X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
+        X_train, y_train = load_data_set(os.path.dirname(full_path) + 'data28.mat')
+        X_test, y_test = load_data_set(os.path.dirname(full_path) + '/../matlabFiles/evaluate.mat')
+
 
     if args.distort is not None:
         # Extend the data set by using distortions
@@ -89,6 +89,16 @@ def main():
         print("ERROR: Classifier not properly declared")
 
 
+def load_data_set(filename):
+    # load the data
+    full_path = os.path.realpath(__file__)
+    X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/' + filename)['data28'][0]
+    X_full = np.array([x.reshape((784,)) for x in X_full])
+    y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/' + filename)['labels28'].ravel() - 1
+
+    return X_full, y_full
+
+
 def parse_arguments(classifiers):
     parser = argparse.ArgumentParser(prog='DrawALine', description='Pattern Recognition tool for recognizing decimals from the NIST data set.')
 
@@ -98,6 +108,7 @@ def parse_arguments(classifiers):
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
+    parser.add_argument('--evaluate', help='Evaluate on a seperate dataset (uses the entire default data-set for training)', action='store_true')
 
     # Add classifiers sub-settings...
     subparsers = parser.add_subparsers(help='classifiers', dest='classifier')
