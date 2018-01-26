@@ -42,8 +42,8 @@ def main():
             print("Splitting the data set...")
             X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
     else:
-        X_train, y_train = load_data_set('data28', 'labels28')
-        X_test, y_test = load_data_set('data_eval', 'labels_eval')
+        X_train, y_train = load_data('prnist')
+        X_test, y_test = load_data('eval')
         X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
 
 
@@ -86,7 +86,7 @@ def main():
     if (args.classifier in classifiers):
         run_batch(classifiers[args.classifier], data_set, args)
     else:
-        print("ERROR: Classifier not properly declared")
+        print("ERROR: Please specify the classifier to use. Run with '-h' option for more information.")
 
 def load_data(type):
     full_path = os.path.realpath(__file__)
@@ -96,7 +96,7 @@ def load_data(type):
         y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
     else:
         file = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/nisteval.mat')
-        X_full = np.array([x.reshape(28,28, order='F') for x in file['nistevaldata']])
+        X_full = np.array([x.reshape((784,)) for x in file['nistevaldata']])
         y_full = file['nistevallabels'].ravel() - 1
     return X_full, y_full
 
