@@ -7,14 +7,14 @@ def get_models(args):
 
     if args.small is not None:
         # Small
-        for gamma in range(-3, 2):
+        for gamma in range(-4, -2):
             for C in range(-5, 6):
                 setting = {'kernel': 'rbf', 'gamma': 10**gamma, 'C': 3**C}
                 settings.append(setting)
     else:
         # Large
-        for gamma in range(-3, 2):
-            for C in range(-5, 6):
+        for gamma in range(-4, -2):
+            for C in range(-3, -1):
                 setting = {'kernel': 'rbf', 'gamma': 10**gamma, 'C': 3**C}
                 settings.append(setting)
 
