@@ -38,6 +38,7 @@ def main():
         X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
     if (args.evaluate):
+        print("Using evaluation data set for testing...")
         X_train = X_full
         y_train = y_full
         if (args.small and not args.test_run):
