@@ -11,3 +11,4 @@ script:
   - python src/main.py --test-run --small qda
   - python src/main.py --test-run --similarity=sim_cos svc --gamma=3 --C=3 --kernel=sigmoid
   - python src/main.py --small lda
+  - python src/import-images.py
