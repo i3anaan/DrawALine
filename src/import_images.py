@@ -34,7 +34,7 @@ def read_image(path):
     im = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     im[im == 255] = 0
     im[im == 29] = 1
-    return im
+    return im.reshape(784)
 
 
 read_all_images()

@@ -1,6 +1,5 @@
 import os
 import os.path
-import sys
 import time
 import csv
 import datetime
@@ -12,7 +11,6 @@ from sklearn.model_selection import train_test_split
 import cls_knn
 import cls_lda
 import cls_qda
-import cls_parzen
 import cls_svc
 import cls_mlp
 import cls_log
@@ -20,6 +18,8 @@ import cls_log
 import distortions
 import similarity
 import feat_pca
+
+import import_images
 
 
 def main():
@@ -37,15 +37,18 @@ def main():
         print("Splitting the dataset...")
         X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
-    if (args.evaluate):
-        print("Using evaluation dataset for testing...")
+    if args.test_set != 'default':
+        print("Using seperate dataset for testing [" + args.test_set + "]...")
         X_train = X_full
         y_train = y_full
         if (args.small and not args.test_run):
             X_train, X__, y_train, y__  = cherry_pick_data_set(10, X_full, y_full)
 
-        X_test, y_test = load_data('eval')
-        X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
+        if (args.test_set=='eval'):
+            X_test, y_test = load_data('eval')
+            X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
+        elif (args.test_set=='live'):
+            X_test, y_test = load_data('live')
 
     if args.distort is not None:
         # Extend the dataset by using distortions
@@ -93,11 +96,13 @@ def load_data(type):
         X_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/data28.mat')['data28'][0]
         X_full = np.array([x.reshape((784,)) for x in X_full])
         y_full = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/labels28.mat')['labels28'].ravel() - 1
-    else:
+    elif type == 'eval':
         file = scipy.io.loadmat(os.path.dirname(full_path) + '/../matlabFiles/nisteval.mat')
         X_full = np.array([x.reshape((28,28), order='F') for x in file['nistevaldata']])
         X_full = np.array([x.reshape((784,)) for x in X_full])
         y_full = file['nistevallabels'].ravel() - 1
+    elif type == 'live':
+        X_full, y_full = import_images.read_all_images();
     return X_full, y_full
 
 
@@ -110,8 +115,8 @@ def parse_arguments(classifiers):
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
-    parser.add_argument('--evaluate', help='Evaluate on a seperate dataset (uses the entire default data-set for training)', action='store_true')
-    parser.add_argument('--digits-per-class', help='The number of digits per class to use for testing in evaluation mode', action='store', type=int, default=10)
+    parser.add_argument('--test-set', help='Evaluate on a seperate dataset (uses the entire default data-set for training)', action='store', choices=['default', 'eval', 'live'])
+    parser.add_argument('--digits-per-class', help='The number of digits per class to use for testing in evaluation mode', action='store', type=int, default=100)
 
     # Add classifiers sub-settings...
     subparsers = parser.add_subparsers(help='classifiers', dest='classifier')
