@@ -20,13 +20,13 @@ def read_all_images():
             ) + '/../live_demo/output/base-{:02d}-{:02d}.bmp'.format(x, y)
             if os.path.isfile(file_name):
                 images.append(read_image(file_name))
-                labels.append(x + 1)  #TODO: this is shitty if 1 image is skipped everything goes wrong.
+                labels.append(x + 1)
 
     images = np.asarray(images)
 
-    for i in range(0,30):
-        #print(visualise_images.visualize_img(images[i]))
-        #print(labels[i])
+    #for i in range(0, 30):
+    #    print(visualise_images.visualize_img(images[i]))
+    #    print(labels[i])
     return (images, labels)
 
 

@@ -2,6 +2,8 @@
 
 The not-so-trivial process of pattern recognition
 
+[![Build Status](https://travis-ci.com/i3anaan/DrawALine.svg?token=idmHsk2qU3ZuQEw2J112&branch=master)](https://travis-ci.com/i3anaan/DrawALine)
+
 ## First time Installation
 _Windows commands are given, since linux users can probably manage themselves_
 1. Install python: https://www.python.org/downloads/
