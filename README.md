@@ -33,14 +33,14 @@ _Please follow the first time installation steps before usage_
 ```
 usage: DrawALine [-h] [--test-run] [--small] [--distort {shift,grow,all}]
                  [--similarity {dsim_edit,sim_norm1,sim_norm2,sim_cos}]
-                 [--pca PCA] [--evaluate]
+                 [--pca PCA] [--test-set {default,eval,live}]
                  [--digits-per-class DIGITS_PER_CLASS]
-                 {qda,lda,log,mlp,svc,knn} ...
+                 {mlp,knn,svc,qda,lda,log} ...
 
 Pattern Recognition tool for recognizing decimals from the NIST dataset.
 
 positional arguments:
-  {qda,lda,log,mlp,svc,knn}
+  {mlp,knn,svc,qda,lda,log}
                         classifiers
 
 optional arguments:
@@ -52,11 +52,13 @@ optional arguments:
   --similarity {dsim_edit,sim_norm1,sim_norm2,sim_cos}
                         Transform the data to similarity representation
   --pca PCA             Use PCA feature extraction
-  --evaluate            Evaluate on a seperate dataset (uses the entire
-                        default data-set for training)
+  --test-set {default,eval,live}
+                        Test on a seperate dataset (uses the entire default
+                        data-set for training)
   --digits-per-class DIGITS_PER_CLASS
                         The number of digits per class to use for testing in
                         evaluation mode
+
 ```
 `python3 ./src/main.py svc -h`
 ```
