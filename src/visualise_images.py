@@ -4,6 +4,7 @@ Functions to visualise the images using ASCII art.
 
 import numpy as np
 
+
 def visualize_img(img):
     """
     Turns the array into a string and makes it more readable.
@@ -13,8 +14,9 @@ def visualize_img(img):
     """
 
     image = np.array_str(img)
-    image = image.replace('0', ' ').replace('1', '#')
+    image = image.replace('0', '.').replace('1', '#')
     return image
+
 
 def print_examples(model, test_set, test_set_answers):
     """

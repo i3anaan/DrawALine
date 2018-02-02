@@ -34,15 +34,21 @@ def extend_dataset_shift(data_X, data_y):
 
 def shift(data_set, x, y):
     output = data_set
+    print(visualize_img(output.reshape((28,28))))
+    dim = int(math.sqrt(len(data_set[0])))
     if x < 0:
+        print("LEFT:")
         output = shift_left(data_set, x * -1)
     else:
+        print("RIGHT:")
         output = shift_right(data_set, x)
     if y < 0:
-        output = shift_down(data_set, y * -1)
+        print("DOWN:")
+        #output = shift_down(data_set, y * -1)
     else:
-        output = shift_up(data_set, y)
-
+        print("UP:")
+        #output = shift_up(data_set, y)
+    print(visualize_img(output.reshape((28,28))))
     return output
 
 
@@ -52,42 +58,36 @@ def crop(data_set, x, y):
 
 def shift_right(data_set, count=1):
     # Each row is an object.
-
     dim = int(math.sqrt(len(data_set[0])))
-
     for i in range(0, len(data_set)):
-        row = data_set[i]
-        row = np.insert(row, 0, [0] * count)
-        for c in range(0, count):
-            row = np.delete(row, len(row) - 1)
-
+        sample = data_set[i].reshape((28,28))
         for y in range(0, dim):
-            for x in range(0, count):
-                row[x + y * dim] = 0
+            row = sample[y]
 
-        data_set[i] = row
+            row = np.insert(row, 0, [0] * count)
+            for c in range(0, count):
+                row = np.delete(row, len(row) - 1)
+
+            sample[y] = row
+        data_set[i] = sample.reshape(784)
 
     return data_set
 
 
 def shift_left(data_set, count=1):
     # Each row is an object.
-
     dim = int(math.sqrt(len(data_set[0])))
-
     for i in range(0, len(data_set)):
-        row = data_set[i]
-
-        row = np.append(row, [0] * count)
-
-        for c in range(0, count):
-            row = np.delete(row, 0)
-
+        sample = data_set[i].reshape((28,28))
         for y in range(0, dim):
-            for x in range(0, count):
-                row[(dim - x - 1) + y * dim] = 0
+            row = sample[y]
 
-        data_set[i] = row
+            row = np.insert(row, len(row) - 1, [0] * count)
+            for c in range(0, count):
+                row = np.delete(row, 0)
+
+            sample[y] = row
+        data_set[i] = sample.reshape(784)
 
     return data_set
 

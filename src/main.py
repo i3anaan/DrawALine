@@ -21,6 +21,8 @@ import distortions
 import similarity
 import feat_pca
 
+import visualise_images
+
 
 def main():
 
@@ -77,6 +79,14 @@ def main():
         'X_test': X_test,
         'y_test': y_test,
     }
+
+    img = X_train[58]
+    print(visualise_images.visualize_img(img.reshape((28,28))))
+    distorted, _ = distortions.extend_dataset_shift(np.asarray([img]), [2])
+    print("Distortions...")
+    for i in range(0,4):
+        print(visualise_images.visualize_img(distorted[i].reshape((28,28))))
+    #print(visualise_images.visualize_img(.reshape((28,28))))
 
     # print the shapes
     print("Training set size: " + str(X_train.shape))
