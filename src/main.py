@@ -115,7 +115,7 @@ def parse_arguments(classifiers):
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
     parser.add_argument('--pca', help='Use PCA feature extraction', action='store', type=int)
-    parser.add_argument('--test-set', help='Test on a seperate dataset (uses the entire default data-set for training)', action='store', choices=['default', 'eval', 'live'])
+    parser.add_argument('--test-set', help='Test on a seperate dataset (uses the entire default data-set for training)', action='store', choices=['default', 'eval', 'live'], default='default')
     parser.add_argument('--digits-per-class', help='The number of digits per class to use for testing in evaluation mode', action='store', type=int, default=100)
 
     # Add classifiers sub-settings...

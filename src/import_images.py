@@ -20,7 +20,7 @@ def read_all_images():
             ) + '/../live_demo/output/base-{:02d}-{:02d}.bmp'.format(x, y)
             if os.path.isfile(file_name):
                 images.append(read_image(file_name))
-                labels.append(x + 1)
+                labels.append((x + 1) % 10)
 
     images = np.asarray(images)
 
