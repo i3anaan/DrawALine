@@ -22,7 +22,7 @@ _Windows commands are given, since linux users can probably manage themselves_
 _Please follow the first time installation steps before usage_
 1. Activate the virtualenv (`.\env\Scripts\activate`)
 2. Run the program using (`python .\src\main.py [preprocessing] [classifier] [parameters]`)
-    * Preprocessing options are used to control the data set that is fed into the classifier
+    * Preprocessing options are used to control the dataset that is fed into the classifier
     * The classifier option determines which classifier to used
     * Each classifier can have their own settings, set using options after the classifier
         * **Note that default settings will be used for parameters that are not set, this can include iterating over a range.**
@@ -37,7 +37,7 @@ usage: DrawALine [-h] [--test-run] [--small] [--distort {shift,grow,all}]
                  [--digits-per-class DIGITS_PER_CLASS]
                  {qda,lda,log,mlp,svc,knn} ...
 
-Pattern Recognition tool for recognizing decimals from the NIST data set.
+Pattern Recognition tool for recognizing decimals from the NIST dataset.
 
 positional arguments:
   {qda,lda,log,mlp,svc,knn}
@@ -45,7 +45,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --test-run            Run in implementation test mode - use a tiny data set
+  --test-run            Run in implementation test mode - use a tiny dataset
   --small               Use a small training set
   --distort {shift,grow,all}
                         Distort the data
@@ -80,7 +80,7 @@ This program outputs in 2 ways, on the terminal and by making use of `.csv` log 
 ### Example terminal output
 `python3 src/main.py --small --distort=shift --pca=45 svc --gamma=3`
 ```
-Cherry picking data set...
+Cherry picking dataset...
 Applying shift distortion...
 Applying PCA feature extraction...
 Training set size: (500, 45)

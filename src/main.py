@@ -29,16 +29,16 @@ def main():
     args = parse_arguments(classifiers)
     X_full, y_full = load_data('prnist') #eval for the nist_eval
     if (args.test_run):
-        print("Using test run data set...")
+        print("Using test run dataset...")
         X_full, X__, y_full, y__ = train_test_split(X_full, y_full, train_size=0.01, random_state=1)
     if (args.small and not args.test_run):
         X_train, X_test, y_train, y_test  = cherry_pick_data_set(10, X_full, y_full)
     else:
-        print("Splitting the data set...")
+        print("Splitting the dataset...")
         X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.1, random_state=1)
 
     if (args.evaluate):
-        print("Using evaluation data set for testing...")
+        print("Using evaluation dataset for testing...")
         X_train = X_full
         y_train = y_full
         if (args.small and not args.test_run):
@@ -48,7 +48,7 @@ def main():
         X_test, X__, y_test, y__ = cherry_pick_data_set(args.digits_per_class, X_test, y_test)
 
     if args.distort is not None:
-        # Extend the data set by using distortions
+        # Extend the dataset by using distortions
         if 'shift' in args.distort or 'all' in args.distort:
             print("Applying shift distortion...")
             X_train, y_train = distortions.extend_dataset_shift(X_train, y_train)
@@ -102,10 +102,10 @@ def load_data(type):
 
 
 def parse_arguments(classifiers):
-    parser = argparse.ArgumentParser(prog='DrawALine', description='Pattern Recognition tool for recognizing decimals from the NIST data set.')
+    parser = argparse.ArgumentParser(prog='DrawALine', description='Pattern Recognition tool for recognizing decimals from the NIST dataset.')
 
     # General commands
-    parser.add_argument('--test-run', help='Run in implementation test mode - use a tiny data set', action='store_true')
+    parser.add_argument('--test-run', help='Run in implementation test mode - use a tiny dataset', action='store_true')
     parser.add_argument('--small', help='Use a small training set', action='store_true')
     parser.add_argument('--distort', help='Distort the data', action='store', choices=['shift', 'grow', 'all'])
     parser.add_argument('--similarity', help='Transform the data to similarity representation', action='store', choices=['dsim_edit', 'sim_norm1', 'sim_norm2', 'sim_cos'])
@@ -123,7 +123,7 @@ def parse_arguments(classifiers):
 
 
 def cherry_pick_data_set(amount, X_full, y_full):
-    print("Cherry picking data set...")
+    print("Cherry picking dataset...")
 
     length = len(X_full)
     step = round(length / 10)
